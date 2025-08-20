@@ -4,6 +4,7 @@ import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
 import { AUTH_SESSION } from './constants';
+import { Session } from '@/types';
 
 // 1. Get secret from environment variables (MUST be set)
 const secretKey =
@@ -96,20 +97,27 @@ export async function decrypt(session: any) {
   }
 }
 
-export async function createAuthSession(accessToken: string): Promise<void> {
+export async function createAuthSession({
+  accessToken,
+  options,
+}: {
+  accessToken: string;
+  options?: any;
+}): Promise<void> {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // AFTER 1 HOUR
 
   // Call `encrypt` to generate the session token
   const session = await encrypt({
-    accessToken: accessToken || '',
+    accessToken: accessToken || null,
     expiresAt,
+    ...options,
   });
 
   // Ensure `session` is successfully created before setting the cookie
   if (session) {
     (await cookies()).set(AUTH_SESSION, session, {
-      httpOnly: true,
-      secure: false,
+      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
       expires: expiresAt,
       sameSite: 'lax',
       path: '/',
@@ -145,11 +153,12 @@ export async function updateAuthSession(fields: any): Promise<void> {
   }
 }
 
-export async function verifySession(): Promise<JWTPayload | null> {
+export async function verifySession(): Promise<Session | null> {
   const cookie = (await cookies()).get(AUTH_SESSION)?.value;
-  const session = await decrypt(cookie);
+  const jwtObj = await decrypt(cookie);
 
-  if (session?.accessToken) return session;
+  if (jwtObj?.accessToken)
+    return { ...jwtObj, accessToken: jwtObj.accessToken || null } as Session;
 
   return null;
 }

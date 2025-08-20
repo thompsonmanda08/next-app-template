@@ -6,9 +6,6 @@ const nextConfig: NextConfig = {
   compress: false, // Disable compression - let reverse proxy handle it
   outputFileTracingRoot: process.cwd(), // Container-specific settings
 
-  devIndicators: {
-    autoPrerender: false,
-  },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -45,7 +42,7 @@ const nextConfig: NextConfig = {
     forceSwcTransforms: false, //Disabled
     serverActions: {
       enabled: true,
-      bodySizeLimit: process.env.MAX_FILE_SIZE_LIMIT || '60mb',
+      bodySizeLimit: process.env.MAX_FILE_SIZE_LIMIT || '10mb',
       allowedOrigins: ['localhost', '*.localhost'],
     },
 

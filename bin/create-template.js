@@ -100,8 +100,8 @@ const TAILWIND_VERSIONS = {
 };
 
 const OPTIONAL_PACKAGES = {
+  // Lucide React icons included by default - no selection needed
   icons: {
-    '@heroicons/react': '^2.2.0',
     'lucide-react': '^0.513.0'
   },
   stateManagement: {
@@ -112,11 +112,6 @@ const OPTIONAL_PACKAGES = {
   },
   animation: {
     'framer-motion': '^12.23.12'
-  },
-  charts: {
-    'chart.js': '^4.5.0',
-    'react-chartjs-2': '^5.3.0',
-    'chroma-js': '3.1.2'
   },
   ui: {
     v3: {
@@ -145,12 +140,7 @@ const OPTIONAL_PACKAGES = {
     'tailwind-merge': '^3.3.1'
   },
   fileHandling: {
-    'react-dropzone': '^14.3.8',
-    'html2canvas': '^1.4.1',
-    'jspdf': '^3.0.1'
-  },
-  monitoring: {
-    '@sentry/nextjs': '^10.5.0'
+    'react-dropzone': '^14.3.8'
   },
   devTools: {
     '@tanstack/react-query-devtools': '^5.85.2'
@@ -287,16 +277,15 @@ async function selectTailwindVersion() {
 
 async function selectPackages() {
   console.log('🎯 Choose which packages to include in your project:\n');
+  console.log('📦 ICONS: Lucide React (included by default)\n');
   
   const selections = {};
   
-  // Icons
-  console.log('📦 ICON LIBRARIES:');
-  const useIcons = await question('  Include icon libraries? (Heroicons + Lucide React) [Y/n]: ');
-  selections.icons = useIcons.toLowerCase() !== 'n';
+  // Icons - always included by default
+  selections.icons = true;
   
   // State Management
-  console.log('\n🔄 STATE MANAGEMENT:');
+  console.log('🔄 STATE MANAGEMENT:');
   const useZustand = await question('  Include Zustand for state management? [Y/n]: ');
   selections.stateManagement = useZustand.toLowerCase() !== 'n';
   
@@ -310,11 +299,6 @@ async function selectPackages() {
   const useFramerMotion = await question('  Include Framer Motion for animations? [Y/n]: ');
   selections.animation = useFramerMotion.toLowerCase() !== 'n';
   
-  // Charts
-  console.log('\n📊 CHARTS:');
-  const useCharts = await question('  Include Chart.js for data visualization? [y/N]: ');
-  selections.charts = useCharts.toLowerCase() === 'y';
-  
   // UI Components
   console.log('\n🎨 UI COMPONENTS:');
   const useUILibs = await question('  Include UI libraries? (HeroUI + Radix UI) [y/N]: ');
@@ -322,7 +306,7 @@ async function selectPackages() {
   
   // File Handling
   console.log('\n📁 FILE HANDLING:');
-  const useFileHandling = await question('  Include file handling? (Dropzone + PDF generation) [y/N]: ');
+  const useFileHandling = await question('  Include file handling? (React Dropzone) [y/N]: ');
   selections.fileHandling = useFileHandling.toLowerCase() === 'y';
   
   // ShadCN UI
@@ -347,11 +331,6 @@ async function selectPackages() {
       selections.shadcnComponents = [];
     }
   }
-
-  // Monitoring
-  console.log('\n📊 MONITORING:');
-  const useSentry = await question('  Include Sentry for error monitoring? [y/N]: ');
-  selections.monitoring = useSentry.toLowerCase() === 'y';
   
   return selections;
 }
@@ -1116,23 +1095,7 @@ export { ${component.name} }`;
 }
 
 function cleanupUnusedFiles(projectPath, selectedPackages) {
-  // Remove chart components if charts not selected
-  if (!selectedPackages.charts) {
-    const chartsPath = path.join(projectPath, 'src/components/charts');
-    if (fs.existsSync(chartsPath)) {
-      fs.rmSync(chartsPath, { recursive: true, force: true });
-    }
-  }
-
-  // Remove Sentry config if monitoring not selected
-  if (!selectedPackages.monitoring) {
-    ['sentry.edge.config.ts', 'sentry.server.config.ts', 'src/instrumentation.ts', 'src/instrumentation-client.ts'].forEach(file => {
-      const filePath = path.join(projectPath, file);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    });
-  }
+  // Charts and Sentry are no longer included in the template, so no cleanup needed
 
   // Remove file handling components if not selected
   if (!selectedPackages.fileHandling) {
