@@ -1,6 +1,6 @@
 {
   "name": "create-webbx-app",
-  "version": "1.3.0",
+  "version": "1.0.3",
   "private": false,
   "scripts": {
     "dev": "next dev --turbo",
