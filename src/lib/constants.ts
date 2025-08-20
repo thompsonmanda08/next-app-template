@@ -1,4 +1,3 @@
-
 export const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL;
 
@@ -8,7 +7,6 @@ export const POCKET_BASE_URL =
 export const BGS_SUPER_MERCHANT_ID = '2da3b36c-ef7f-4222-a5b1-59702109e576';
 
 export const AUTH_SESSION = '__com.inter-webb__session';
-
 
 export const placeHolderImage = '/images/placeholder-image.webp';
 export const DefaultCover = '/images/profile-cover.jpg';
@@ -60,9 +58,8 @@ export const QUERY_KEYS = {
   users: 'users',
   transactions: 'transactions',
   WORKSPACES: 'workspaces',
-  SETUP: 'setup'
+  SETUP: 'setup',
 };
-
 
 // const NRC_PASSPORT = /^(ZN[0-9]{6}|[0-9]{6}/[0-9]{2}/[1]{1})$/
 
@@ -74,52 +71,50 @@ export const ZAMTEL_NO = /^(?:\+?26|26)?0(95|75)\d{7}$/;
 export const PASSWORD_PATTERN =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
-// Animation variants for Framer Motion
-export const slideDownInView = {
-  initial: { y: -20, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  exit: { y: -20, opacity: 0 },
-  transition: { duration: 0.3 }
+// ANIMATION_VARIANTS
+export const containerVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      // staggerChildren: 0.25,
+    },
+  },
+  exit: { opacity: 0 },
+};
+
+export const staggerContainerVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      // staggerChildren: 0.25,
+    },
+  },
+  exit: { opacity: 0 },
 };
 
 export const staggerContainerItemVariants = {
-  initial: { y: 20, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  exit: { y: 20, opacity: 0 }
+  hidden: { opacity: 0, y: -60 },
+  show: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 60 },
 };
 
-// Workspace types
-export const WORKSPACE_TYPES = {
-  PERSONAL: 'personal',
-  BUSINESS: 'business',
-  ENTERPRISE: 'enterprise'
-};
-
-// Color mappings for UI components
-export const SERVICE_PROVIDER_COLOR_MAP = {
-  MTN: 'yellow',
-  AIRTEL: 'red', 
-  ZAMTEL: 'green',
-  VISA: 'blue',
-  MASTERCARD: 'orange',
-  DEFAULT: 'gray'
-};
-
-export const TRANSACTION_STATUS_COLOR_MAP = {
-  pending: 'warning',
-  completed: 'success',
-  failed: 'danger',
-  cancelled: 'default',
-  processing: 'primary'
-};
-
-// Additional animation variants
-export const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { 
+export const slideDownInView = {
+  hidden: {
+    opacity: 0,
+    y: -100,
+    transition: {
+      duration: 0.5,
+      ease: 'easeInOut',
+    },
+  },
+  visible: {
+    y: 0,
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      duration: 0.3,
+      ease: 'easeInOut',
+    },
+  },
 };

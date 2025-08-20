@@ -3,7 +3,7 @@ import authenticatedApiClient, {
   handleError,
   successResponse,
 } from '@/lib/api-config';
-import { createAuthSession } from '@/lib/session';
+import { createAuthSession, updateAuthSession } from '@/lib/session';
 import { apiClient } from '@/lib/utils';
 import { APIResponse } from '@/types';
 import { LoginPayload, RegistrationPayload } from '@/types/account';
@@ -87,34 +87,22 @@ export async function getRefreshToken(): Promise<APIResponse> {
   }
 }
 
-/**
- * Handles user idle screen lock functionality
- * This is a stub implementation for the template
- */
-export async function lockScreenOnUserIdle(): Promise<APIResponse> {
+export const getUserProfile = async (): Promise<APIResponse> => {
   try {
-    // Implement screen lock logic here
-    // For template purposes, this is a stub
-    return successResponse(null, 'Screen lock initiated');
-  } catch (error: Error | any) {
-    return handleError(error, 'POST | LOCK SCREEN', 'screen-lock');
-  }
-}
+    console.log('Fetching fresh profile data');
+    const response = await authenticatedApiClient({
+      method: 'GET',
+      url: '/user/profile',
+    });
 
-/**
- * Validates TPIN (Transaction PIN)
- * This is a stub implementation for the template
- */
-export async function validateTPIN(tpin: string): Promise<APIResponse> {
-  try {
-    // Implement TPIN validation logic here
-    // For template purposes, this is a stub
-    const isValid = tpin && tpin.length >= 4;
-    return successResponse(
-      { valid: isValid }, 
-      isValid ? 'TPIN is valid' : 'Invalid TPIN'
-    );
-  } catch (error: Error | any) {
-    return handleError(error, 'POST | VALIDATE TPIN', 'validate-tpin');
+    console.log('PROFILE RESPONSE:', response.data);
+
+    const user = response?.data || null;
+
+    await updateAuthSession({ user });
+
+    return successResponse(user);
+  } catch (error) {
+    return handleError(error, 'GET', '/profile');
   }
-}
+};

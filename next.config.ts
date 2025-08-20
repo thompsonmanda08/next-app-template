@@ -1,4 +1,4 @@
-import { NextConfig } from 'next';
+import { NextConfig, SizeLimit } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -30,10 +30,10 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     rules: {
-      // "*.svg": {
-      //   loaders: ["@svgr/webpack"],
-      //   as: "*.js",
-      // },
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
     },
   },
 
@@ -41,8 +41,7 @@ const nextConfig: NextConfig = {
     // Disable SWC transforms that might force HTTPS
     forceSwcTransforms: false, //Disabled
     serverActions: {
-      enabled: true,
-      bodySizeLimit: process.env.MAX_FILE_SIZE_LIMIT || '10mb',
+      bodySizeLimit: (process.env.MAX_FILE_SIZE_LIMIT as SizeLimit) || '10mb',
       allowedOrigins: ['localhost', '*.localhost'],
     },
 

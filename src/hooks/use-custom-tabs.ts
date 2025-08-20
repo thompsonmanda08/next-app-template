@@ -46,5 +46,7 @@ export default function useCustomTabsHook(tabs: React.ReactNode[]) {
     setIsLoading,
     navigateForward,
     navigateBackwards,
+    isLastStep: currentTabIndex === lastTab,
+    isFirstStep: currentTabIndex === firstTab,
   };
 }

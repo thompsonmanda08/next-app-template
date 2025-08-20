@@ -31,21 +31,33 @@ export const theme = {
       primary: {
         DEFAULT: 'hsl(var(--primary))',
         foreground: 'hsl(var(--primary-foreground))',
-        light: 'hsl(var(--primary-light))',
-        50: '#f0f6ff',
-        100: '#e1edff',
-        200: '#bbd6ff',
-        300: '#9DC4FF',
-        400: '#3b81e1',
-        500: '#1B64CE',
-        600: '#175abc',
-        700: '#1551a9',
-        800: '#10438d',
-        900: '#071e40',
+        // Black-based primary colors
+        50: '#f7f7f7',
+        100: '#e3e3e3',
+        200: '#c8c8c8',
+        300: '#a4a4a4',
+        400: '#818181',
+        500: '#666666',
+        600: '#515151',
+        700: '#434343',
+        800: '#383838',
+        900: '#000000',
+        950: '#000000',
       },
       secondary: {
         DEFAULT: 'hsl(var(--secondary))',
         foreground: 'hsl(var(--secondary-foreground))',
+        // White-based secondary colors
+        50: '#ffffff',
+        100: '#fafafa',
+        200: '#f5f5f5',
+        300: '#f0f0f0',
+        400: '#e5e5e5',
+        500: '#d4d4d4',
+        600: '#a3a3a3',
+        700: '#737373',
+        800: '#525252',
+        900: '#404040',
       },
       destructive: {
         DEFAULT: 'hsl(var(--destructive))',
@@ -85,18 +97,38 @@ export const plugins = [
     themes: {
       light: {
         colors: {
-          default: {
-            DEFAULT: '#e7f1ff',
-            foreground: '#4982d9',
+          primary: {
+            DEFAULT: '#000000',
+            foreground: '#ffffff',
           },
+          secondary: {
+            DEFAULT: '#ffffff',
+            foreground: '#000000',
+          },
+          default: {
+            DEFAULT: '#f5f5f5',
+            foreground: '#000000',
+          },
+          background: '#ffffff',
+          foreground: '#000000',
         },
       },
       dark: {
         colors: {
-          default: {
-            DEFAULT: '#0e1014',
-            foreground: '#fcfcfc',
+          primary: {
+            DEFAULT: '#ffffff',
+            foreground: '#000000',
           },
+          secondary: {
+            DEFAULT: '#000000',
+            foreground: '#ffffff',
+          },
+          default: {
+            DEFAULT: '#1a1a1a',
+            foreground: '#ffffff',
+          },
+          background: '#000000',
+          foreground: '#ffffff',
         },
       },
     },

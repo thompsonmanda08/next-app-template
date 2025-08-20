@@ -1,348 +1,272 @@
 'use client';
-import { Card, addToast } from '@heroui/react';
+import { addToast } from '@heroui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useState } from 'react';
 
-// Actions removed - template stub functions
-const createMerchantAdminUser = async (data: any) => ({ success: true });
-const createNewMerchant = async (data: any) => ({ success: true });
-const submitMerchantBankDetails = async (data: any) => ({ success: true });
-import useAuthStore from '@/context/auth-store';
 import useCustomTabsHook from '@/hooks/use-custom-tabs';
 import { containerVariants } from '@/lib/constants';
 
-import StatusMessage from '../base/status-message';
 import { Button } from '../ui/button';
+import { RegistrationPayload, User } from '@/types/account';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { ErrorState } from '@/types';
+import { registerUser } from '@/app/_actions/auth-actions';
+import { useRouter } from 'next/navigation';
+import CustomAlert from '../base/alert';
+import { Input } from '../ui/input-field';
 
-// Step components removed for template - implement as needed
-const Step0 = () => <div>Step 0 - Business Registration</div>;
-const Step1 = () => <div>Step 1 - Basic Info</div>;
-const Step1_TPIN = () => <div>Step 1.1 - TPIN</div>;
-const Step2 = () => <div>Step 2 - Details</div>;
-const Step3 = () => <div>Step 3 - Verification</div>;
+export default function SignUpForm() {
+  const router = useRouter();
+  const [formData, setFormData] = useState<Partial<User>>({});
+  const [error, setError] = useState<ErrorState | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-export const STEPS = [
-  'business-registration',
-  'business-information',
-  'business-bank-details',
-  'user-information',
-];
-
-export default function SignUpForm({
-  superMerchantID,
-}: {
-  superMerchantID: string;
-}) {
-  const {
-    businessInfo,
-    newAdminUser,
-    bankDetails,
-    error,
-    updateErrorStatus,
-    setBusinessInfo,
-    setBankingDetails,
-    setNewAdminUser,
-    isLoading,
-    setIsLoading,
-    setAccountCreated,
-    merchantID,
-    setMerchantID,
-    setError,
-    isValidTPIN,
-    resetAuthData,
-  } = useAuthStore();
-
-  const NEW_REGISTRATION = [
-    // BUSINESS INFO
-    <Step1
-      key={STEPS[1] + '_NEW'}
-      backToStart={handleGotoStart}
-      updateDetails={updateAccountDetails}
-    />,
-
-    <Step2
-      key={STEPS[2]} // BANK DETAILS
-      backToStart={handleGotoStart}
-      updateDetails={updateAccountDetails}
-    />,
-
-    <Step3
-      key={STEPS[3]} // ADMIN USER (OWNER)
-      backToStart={handleGotoStart}
-      updateDetails={updateAccountDetails}
-    />,
-  ];
-
-  const CONTINUE_REGISTRATION = [
-    <Step1_TPIN
-      key={STEPS[1] + '_CONTINUE'} // GET ACCOUNT DETAILS BY TPIN
-      backToStart={handleGotoStart}
-      updateDetails={updateAccountDetails}
-    />,
-    <Step2
-      key={STEPS[2]} // BANK DETAILS
-      backToStart={handleGotoStart}
-      updateDetails={updateAccountDetails}
-    />,
-    <Step3
-      key={STEPS[3]} // ADMIN USER (OWNER)
-      backToStart={handleGotoStart}
-      updateDetails={updateAccountDetails}
-    />,
-  ];
-
-  const RENDERED_COMPONENTS =
-    businessInfo?.registration != 'NEW'
-      ? CONTINUE_REGISTRATION
-      : NEW_REGISTRATION;
+  const updateFormData = (data: Partial<User>) => {
+    setFormData((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  };
 
   const {
     activeTab,
-    navigateForward,
+    // navigateForward,
     // navigateBackwards,
     navigateTo,
     currentTabIndex,
-    firstTab,
-    lastTab,
   } = useCustomTabsHook([
-    <Step0 key={STEPS[0]} updateDetails={updateAccountDetails} />, // BUSINESS SPACE TYPE
-    ...RENDERED_COMPONENTS,
+    <Step1
+      key="user"
+      formData={formData}
+      updateFormData={updateFormData}
+      isSubmitting={isLoading}
+    />,
+    <Step2
+      key={'password'}
+      formData={formData}
+      updateFormData={updateFormData}
+      handleBack={() => goTo(0)}
+      isSubmitting={isLoading}
+    />,
   ]);
 
-  const isLastStep = currentTabIndex === lastTab;
-  const isFirstStep = currentTabIndex === firstTab;
-
-  function handleGotoStart() {
-    resetAuthData();
-    navigateTo(0);
-  }
   function goTo(i: number) {
     navigateTo(i);
   }
 
-  function updateAccountDetails(
-    step: (typeof STEPS)[number],
-    fields: Partial<typeof businessInfo>,
-  ) {
-    // BUSINESS INFO
-    if (STEPS[0] == step || STEPS[1] == step) {
-      setBusinessInfo({ ...businessInfo, ...fields });
-
-      return;
-    }
-
-    if (STEPS[2] == step) {
-      setBankingDetails({ ...bankDetails, ...fields });
-
-      return;
-    }
-
-    // NEW ADMIN USER
-    if (STEPS[3] == step) {
-      setNewAdminUser({ ...newAdminUser, ...fields });
-    }
-  }
-
   async function handleCreateAccount(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError({ status: false, message: '' });
+
+    // IMPLEMENT VALIDATION
+
     setIsLoading(true);
-    updateErrorStatus({ status: false, message: '' });
+    const response = await registerUser(formData as RegistrationPayload);
 
-    // ******** STEP: 0 ==>  USER CHOOSES TO EITHER CONTINUE OR START A NEW REGISTRATION ********** //
-    if (businessInfo.registration == 'CONTINUE' && !isValidTPIN) {
-      navigateForward();
-      setIsLoading(false);
-
-      return;
-    }
-    // ******************************************************************************************** //
-
-    // ************** STEP: 1 ==>  CONTINUE NEW MERCHANT ACCOUNT CREATION ************************* //
-    // IF USER IS CONTINUING REGISTRATION AND HAS PROVIDED A VALID TPIN
-    // THEN NAVIGATE THEM TO CORRECT STAGE
-    if (
-      businessInfo.registration == 'CONTINUE' &&
-      currentTabIndex === 1 &&
-      isValidTPIN &&
-      businessInfo?.stage // EXPECTED TO BE EITHER 2 OR 3
-    ) {
-      navigateTo(Number(businessInfo?.stage + currentTabIndex)); // INDEX START FROM ZERO
-      setIsLoading(false);
-
-      return;
-    }
-
-    // ******************************************************************************************** //
-
-    // ************** STEP: 1 ==>  CREATE NEW MERCHANT ACCOUNT *********************************** //
-    if (currentTabIndex === 1 && STEPS[currentTabIndex] === STEPS[1]) {
-      const response = await createNewMerchant({
-        ...businessInfo,
-        super_merchant_id: superMerchantID,
+    if (response?.success) {
+      addToast({
+        color: 'success',
+        title: 'Success',
+        description: 'Account created successfully!',
       });
-
-      const merchantID = response?.data?.merchantID;
-
-      if (merchantID) {
-        setMerchantID(merchantID);
-      }
-
-      if (response?.success && (response?.data?.merchantID || merchantID)) {
-        addToast({
-          color: 'success',
-          title: 'Success',
-          description: 'Business Details Submitted!',
-        });
-        navigateForward();
-        setIsLoading(false);
-
-        return;
-      } else {
-        addToast({
-          color: 'danger',
-          title: 'Failed',
-          description: 'Error Submitting Business Details',
-        });
-        updateErrorStatus({ status: true, message: response?.message });
-        setIsLoading(false);
-
-        return;
-      }
-    }
-    // ******************************************************************************************** //
-
-    // ************** STEP: 2 ==>  APPEND MERCHANT ACCOUNT BANK DETAILS *************************** //
-    if (currentTabIndex === 2 && STEPS[currentTabIndex] === STEPS[2]) {
-      const response = await submitMerchantBankDetails(bankDetails, merchantID);
-
-      if (response?.success) {
-        addToast({
-          color: 'success',
-          title: 'Success',
-          description: 'Bank information Submitted!',
-        });
-        navigateForward();
-        setIsLoading(false);
-
-        return;
-      } else {
-        addToast({
-          color: 'danger',
-          title: 'Failed',
-          description: 'Error Submitting Bank information!',
-        });
-        updateErrorStatus({ status: true, message: response?.message });
-        setIsLoading(false);
-
-        return;
-      }
-    }
-    // ******************************************************************************************** //
-
-    // ******************** STEP: 3 ==>  CREATE ADMIN USER - LAST STEP *************************** //
-    if (isLastStep && STEPS[currentTabIndex] === STEPS[lastTab]) {
-      // Passwords Validation
-      if (newAdminUser?.password !== newAdminUser?.confirmPassword) {
-        updateErrorStatus({
-          onPassword: true,
-          message: 'Passwords do not match',
-        });
-        setIsLoading(false);
-
-        return;
-      }
-
-      const response = await createMerchantAdminUser(newAdminUser, merchantID);
-
-      if (response?.success) {
-        addToast({
-          color: 'success',
-          title: 'Success',
-          description: 'Account Created Successfully',
-        });
-        setAccountCreated(true);
-        setIsLoading(false);
-
-        return;
-      } else {
-        addToast({
-          color: 'danger',
-          title: 'Failed',
-          description: 'Error Creating Account!',
-        });
-        updateErrorStatus({ status: true, message: response?.message });
-        setIsLoading(false);
-
-        return;
-      }
-    }
-    // ******************************************************************************************** //
-
-    if (!isLastStep) {
-      navigateForward();
+      router.push('/login');
+    } else {
+      setError({ status: true, message: response?.message });
       setIsLoading(false);
-
-      return;
+      addToast({
+        color: 'danger',
+        title: 'Error',
+        description: response?.message,
+      });
     }
   }
 
-  useEffect(() => {
-    // Clean out any errors if the user makes any changes to the form
-    setError({});
-  }, [newAdminUser, businessInfo]);
+  // useEffect(() => {
+  //   // Clean out any errors if the user makes any changes to the form
+  //   setError({});
+  // }, [formData]);
 
   // FOR REGISTRATION
 
   return (
-    <Card className="mx-auto w-full flex-auto p-6 sm:max-w-[790px]">
-      <div className="flex flex-col">
-        <form
-          className="mx-auto flex w-full flex-col items-center justify-center gap-4"
-          onSubmit={handleCreateAccount}
+    <form
+      className="mx-auto flex w-full flex-col items-center justify-center gap-4"
+      onSubmit={handleCreateAccount}
+    >
+      <AnimatePresence mode="wait">
+        <motion.div
+          // key={currentTabIndex}
+          animate={'show'}
+          className="flex w-full flex-col items-center justify-center gap-y-4"
+          exit={'exit'}
+          initial={'hidden'}
+          transition={{ duration: 0.5 }}
+          variants={containerVariants}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentTabIndex}
-              animate={'show'}
-              className="flex w-full flex-col items-center justify-center gap-y-4"
-              exit={'exit'}
-              initial={'hidden'}
-              transition={{ duration: 0.5 }}
-              variants={containerVariants}
-            >
-              {activeTab}
-            </motion.div>
-          </AnimatePresence>
+          {activeTab}
+        </motion.div>
+      </AnimatePresence>
 
-          {error?.status && (
-            <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center">
-              <StatusMessage error={error.status} message={error.message} />
-            </div>
-          )}
-
-          <div className="mt-5 flex w-full items-end justify-center gap-4 md:justify-end">
-            <Button
-              className="w-full"
-              color="primary"
-              disabled={
-                isLoading ||
-                (businessInfo.registration == 'CONTINUE' &&
-                  !isValidTPIN &&
-                  currentTabIndex === 1)
-              }
-              isLoading={isLoading}
-              size="lg"
-              type={'submit'}
-            >
-              {isFirstStep
-                ? 'Get Started'
-                : !isLastStep
-                  ? 'Next'
-                  : 'Create Account'}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </Card>
+      {error?.status && (
+        <div className="mx-auto mt-1 flex w-full flex-col items-center justify-center">
+          <CustomAlert color="danger" title="Error">
+            {error.message}
+          </CustomAlert>
+        </div>
+      )}
+    </form>
   );
 }
+
+// Step components removed for template - implement as needed
+const Step1 = ({
+  formData,
+  updateFormData,
+  isSubmitting,
+}: {
+  formData: Partial<User>;
+  updateFormData: (data: Partial<User>) => void;
+  isSubmitting: boolean;
+}) => (
+  <>
+    <Input
+      label="Email Address"
+      type="email"
+      id="email"
+      placeholder="your@email.com"
+      value={formData.email}
+      onChange={(e) => updateFormData({ email: e.target.value })}
+      required
+    />
+
+    <Button type="submit" disabled={isSubmitting} className="w-full">
+      Continue to Password
+    </Button>
+  </>
+);
+const Step2 = ({
+  formData,
+  updateFormData,
+  isSubmitting,
+  handleBack,
+}: {
+  formData: Partial<User>;
+  updateFormData: (data: Partial<User>) => void;
+  isSubmitting: boolean;
+  handleBack: () => void;
+}) => {
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
+  return (
+    <>
+      <div className="bg-gray-50 p-4 rounded-lg mb-6">
+        <h3 className="font-medium text-black mb-2">Store Information</h3>
+        <div className="text-sm text-gray-600 space-y-1">
+          <p>
+            <strong>Email:</strong> {formData?.email}
+          </p>
+          <p>
+            <strong>Name:</strong> {formData?.firstName} {formData?.lastName}
+          </p>
+          <p>
+            <strong>Mobile Number:</strong> {formData?.mobileNumber}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <Input
+          aria-describedby="password-addon"
+          aria-label="Password"
+          // isInvalid={error?.onFields}
+          label="Password"
+          name="password"
+          placeholder="Create a strong password"
+          type={showPassword.password ? 'text' : 'password'}
+          required
+          value={formData?.password}
+          onChange={(e) => {
+            updateFormData({ password: e.target.value });
+          }}
+          autoComplete={undefined}
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Must be at least 8 characters long
+        </p>
+        {formData?.password && formData?.password.length > 0 && (
+          <button
+            type="button"
+            className="absolute cursor-pointer right-3 top-[55%] transform -translate-y-1/2 text-gray-400"
+            onClick={() =>
+              setShowPassword((prev) => ({
+                ...prev,
+                password: !showPassword.password,
+              }))
+            }
+          >
+            {showPassword.password ? (
+              <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
+            ) : (
+              <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
+            )}
+          </button>
+        )}
+      </div>
+
+      <div className="relative">
+        <Input
+          label="Confirm Password"
+          type={showPassword.confirmPassword ? 'text' : 'password'}
+          id="confirmPassword"
+          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors placeholder:text-gray-400 text-black"
+          placeholder="Confirm your password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+        {confirmPassword && confirmPassword.length > 0 && (
+          <button
+            type="button"
+            className="absolute cursor-pointer right-3 top-[70%] transform -translate-y-1/2 text-gray-400"
+            onClick={() =>
+              setShowPassword((prev) => ({
+                ...prev,
+                confirmPassword: !showPassword.confirmPassword,
+              }))
+            }
+          >
+            {showPassword.confirmPassword ? (
+              <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
+            ) : (
+              <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
+            )}
+          </button>
+        )}
+      </div>
+
+      <div className="flex gap-4">
+        <Button
+          type="button"
+          variant="bordered"
+          onClick={handleBack}
+          className="w-full bg-gray-100 text-black"
+        >
+          Back
+        </Button>
+
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          className="w-full"
+        >
+          Submit
+        </Button>
+      </div>
+    </>
+  );
+};

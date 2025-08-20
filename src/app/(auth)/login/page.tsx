@@ -1,41 +1,63 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-
-import Logo from '@/components/base/logo';
 import LoginForm from '@/components/forms/login-form';
-import { BGS_SUPER_MERCHANT_ID } from '@/lib/constants';
+import CustomAlert from '@/components/base/alert';
 
-function LoginPage() {
+export default function LoginPage() {
+  const searchParams = useSearchParams();
+
+  const isPasswordResetComplete = searchParams.get('password_reset');
+
+  // Check for success message from signup
+  useEffect(() => {
+    const success = searchParams.get('success');
+    if (success === 'account-created') {
+      // SET A MESSAGE HERE
+    }
+  }, [searchParams]);
+
   return (
-    <div className="relative -mt-[320px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none">
-      <div className="mb-10 flex flex-col items-center rounded-t-2xl border-b-0 p-6 pb-0 ">
-        <Logo className="scale-[1.5] mb-4" />
-        <h2
-          className={
-            'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
-          }
-        >
-          Welcome Back!
-        </h2>
-        <p className="text-shadow-sm mb-0 text-center text-white">
-          Enter your email and password to sign in
-        </p>
+    <div className="w-full max-w-md">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-light text-black mb-2">
+          Welcome <span className="font-bold">Back</span>
+        </h1>
+        <p className="text-gray-600">Sign in to access your account</p>
       </div>
-      {/********************* LOGIN FORM *********************/}
+
+      {isPasswordResetComplete && (
+        <>
+          <CustomAlert color="success" className="mb-4 mt-2" title="Success">
+            Password reset completed successfully!
+          </CustomAlert>
+        </>
+      )}
+
       <LoginForm />
-      {/********************* LOGIN FORM *********************/}
-      <div className="my-10 bg-transparent text-center">
-        <p className="mx-auto  font-inter text-base font-medium leading-6 tracking-normal text-foreground/50">
-          Don&apos;t have an account?
+
+      <div className="mt-8 text-center">
+        <p className="text-gray-600">
+          Don&apos;t have an account?{' '}
           <Link
-            className="relative z-10 ml-1 bg-gradient-to-br from-primary to-primary/80 bg-clip-text font-bold text-transparent"
-            href={`/register/${BGS_SUPER_MERCHANT_ID}`}
+            href="/register"
+            className="text-black font-semibold hover:underline"
           >
-            Create Account
+            Register
           </Link>
         </p>
+      </div>
+
+      <div className="mt-6 text-center">
+        <Link
+          href="/forgot-password"
+          className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          Forgot your password?
+        </Link>
       </div>
     </div>
   );
 }
-
-export default LoginPage;

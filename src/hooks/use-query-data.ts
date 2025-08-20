@@ -1,85 +1,48 @@
-import { useState, useEffect } from 'react';
+import { QUERY_KEYS } from '@/lib/constants';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 
-export interface QueryData {
-  user?: any;
-  workspace?: any;
-  permissions?: string[];
-}
+//SERVER ACTIONS
+const functionToDoAction = async (data: any): Promise<void> => {
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
-export function useQueryData() {
-  const [data, setData] = useState<QueryData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // Simulate random failure for demo
+  if (Math.random() < 0.1) {
+    throw new Error('Payment failed');
+  }
+};
 
-  useEffect(() => {
-    // This is a stub implementation
-    setLoading(false);
-    setData({
-      user: { name: 'User', email: 'user@example.com' },
-      workspace: { name: 'Default Workspace' },
-      permissions: []
-    });
-  }, []);
+//SERVER ACTIONS
+const functionToGetProfile = async (data: any): Promise<void> => {
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  return {
-    data,
-    loading,
-    error,
-    refetch: () => {},
-    mutate: () => {}
-  };
-}
+  // Simulate random failure for demo
+  if (Math.random() < 0.1) {
+    throw new Error('Payment failed');
+  }
+};
 
-// Additional exports for specific use cases
-export function useWorkspaceInit() {
-  const [workspace, setWorkspace] = useState<any>({ name: 'Default Workspace', id: 'workspace-1' });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export const usePayBill = () => {
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    setLoading(false);
-    setWorkspace({ name: 'Default Workspace', id: 'workspace-1' });
-  }, []);
+  return useMutation({
+    mutationFn: functionToDoAction,
+    onSuccess: () => {
+      // Invalidate and refetch transactions
+      queryClient.invalidateQueries({ queryKey: ['key'] });
+      queryClient.invalidateQueries({ queryKey: ['key'] });
+    },
+  });
+};
 
-  const mutate = () => {
-    // Stub mutation function
-  };
-
-  return {
-    workspace,
-    loading,
-    error,
-    refetch: () => {},
-    data: workspace,
-    isLoading: loading,
-    isPending: loading,
-    mutate
-  };
-}
-
-export function useRefreshToken() {
-  const [refreshing, setRefreshing] = useState(false);
-
-  const refresh = async (param?: any) => {
-    setRefreshing(true);
-    // Stub implementation
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setRefreshing(false);
-  };
-
-  return {
-    refresh,
-    refreshing
-  };
-}
-
-export function useWorkspaceCallbackURL() {
-  const [callbackURL, setCallbackURL] = useState('https://example.com/callback');
-  const [loading, setLoading] = useState(false);
-
-  return {
-    callbackURL,
-    loading,
-    updateURL: (url: string) => setCallbackURL(url)
-  };
+export function useUserProfile() {
+  return useQuery({
+    queryFn: functionToGetProfile,
+    queryKey: [QUERY_KEYS],
+    staleTime: 0, // Use cache duration as stale time
+    gcTime: 0, // Don't cache in memory
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+  });
 }

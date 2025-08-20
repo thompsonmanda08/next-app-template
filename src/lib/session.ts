@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { JWTPayload, SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
 import { AUTH_SESSION } from './constants';
@@ -141,8 +141,8 @@ export async function updateAuthSession(fields: any): Promise<void> {
 
     if (session) {
       (await cookies()).set(AUTH_SESSION, session, {
-        httpOnly: true,
-        secure: false,
+        httpOnly: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production',
         expires: expiresAt,
         sameSite: 'lax',
         path: '/',

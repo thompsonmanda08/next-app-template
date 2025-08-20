@@ -1,41 +1,49 @@
 'use client';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-// Action removed - using loginUser from auth-actions
-import { loginUser } from '@/app/_actions/auth-actions';
 import { Input } from '@/components/ui/input-field';
-import useAuthStore from '@/context/auth-store';
 import { LoginPayload } from '@/types/account';
 
-import Card from '../base/custom-card';
-import StatusMessage from '../base/status-message';
 import { Button } from '../ui/button';
+import CustomAlert from '../base/alert';
+import { ErrorState } from '@/types';
+import { useRouter } from 'next/navigation';
+import { addToast } from '@heroui/react';
+import { loginUser } from '@/app/_actions/auth-actions';
 
 function LoginForm() {
-  const {
-    loginDetails,
-    updateLoginDetails,
-    updateErrorStatus,
-    setIsLoading,
-    error,
-    setError,
-    isLoading,
+  const router = useRouter();
+  const [formData, setFormData] = useState<LoginPayload>({
+    email: '',
+    password: '',
+  });
+  const [error, setError] = useState<ErrorState | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-    resetAuthData,
-  } = useAuthStore();
+  const updateFormData = (data: Partial<LoginPayload>) => {
+    setFormData((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  };
+
+  const updateError = (data: Partial<ErrorState>) => {
+    setError((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  };
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const emailusername = formData.get('emailusername') as string;
-    const password = formData.get('password') as string;
-    const loginDetails: LoginPayload = { emailusername, password };
+    const email = formData.email;
+    const password = formData.password;
 
-    if (!emailusername || !password) {
-      updateErrorStatus({
+    if (!email || !password) {
+      updateError({
         onFields: true,
         status: true,
         message: 'Provide login credentials',
@@ -45,21 +53,22 @@ function LoginForm() {
       return;
     }
 
-    const response = await loginUser(loginDetails);
+    const response = await loginUser(formData);
 
     if (response?.success) {
-      window.location.href = '/workspaces';
-
-      return;
+      addToast({
+        color: 'success',
+        title: 'Success',
+        description: 'Login successful!',
+      });
+      router.push('/home');
+    } else {
+      updateError({
+        status: !response?.success,
+        message: response?.message,
+      });
+      setIsLoading(false);
     }
-
-    updateErrorStatus({
-      status: !response?.success,
-      message: response?.message,
-    });
-    setIsLoading(false);
-
-    return;
   }
 
   useEffect(() => {
@@ -69,22 +78,21 @@ function LoginForm() {
     // RESET ALL AUTH DATA
     return () => {
       setError({});
-      resetAuthData();
     };
-  }, [loginDetails]);
+  }, [formData]);
 
   return (
-    <Card className="mx-auto w-full max-w-sm flex-auto p-6 ">
+    <div className="mx-auto w-full max-w-sm flex-auto p-6 ">
       <form className="flex flex-col gap-2" role="form" onSubmit={handleLogin}>
         <Input
           aria-describedby="email-addon"
           aria-label="Email"
           isInvalid={error?.onFields}
           label="Email or Username"
-          name={'emailusername'}
+          name={'email'}
           placeholder="Enter your email or username"
           onChange={(e) => {
-            updateLoginDetails({ emailusername: e.target.value });
+            updateFormData({ email: e.target.value });
           }}
         />
 
@@ -97,7 +105,7 @@ function LoginForm() {
           placeholder="Enter Password"
           type="password"
           onChange={(e) => {
-            updateLoginDetails({ password: e.target.value });
+            updateFormData({ password: e.target.value });
           }}
         />
         <p className="-mt-1 ml-1 text-xs font-medium text-foreground/60 xl:text-sm">
@@ -118,12 +126,14 @@ function LoginForm() {
           Sign in
         </Button>
       </form>
-      {error && error?.status && (
-        <div className="mx-auto mt-2 flex w-full flex-col items-center justify-center gap-4">
-          <StatusMessage error={error.status} message={error.message} />
+      {error?.status && (
+        <div className="mx-auto mt-1 flex w-full flex-col items-center justify-center">
+          <CustomAlert color="danger" title="Error">
+            {error.message}
+          </CustomAlert>
         </div>
       )}
-    </Card>
+    </div>
   );
 }
 

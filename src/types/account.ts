@@ -4,18 +4,18 @@ export type LoginPayload = {
   password: string;
 };
 export type RegistrationPayload = {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   [x: string]: string;
 };
 
 export type User = {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  mobile_number: string;
+  mobileNumber: string;
   username: string;
   [x: string]: string;
 };
