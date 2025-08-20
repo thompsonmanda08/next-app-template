@@ -6,9 +6,9 @@ A modern, production-ready Next.js 15 template with TypeScript, Tailwind CSS, an
 
 - ⚡ **Next.js 15** with App Router and Turbo
 - 🔷 **TypeScript** for type safety
-- 🎨 **Tailwind CSS** for styling
+- 🎨 **Tailwind CSS v3/v4** - Choose your preferred version
 - 🧩 **Modular Components** - Organized component library
-- 🎨 **ShadCN UI Integration** - Modern component system with Tailwind CSS
+- 🎨 **ShadCN UI Integration** - Works with both Tailwind versions
 - 📦 **Smart Package Manager** - Auto-detects Bun/Yarn/npm
 - 🔐 **Authentication Ready** - Auth components and layouts
 - 📱 **Responsive Design** - Mobile-first approach

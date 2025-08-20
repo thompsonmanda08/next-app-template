@@ -29,6 +29,19 @@ const question = (prompt) => {
   });
 };
 
+const TAILWIND_VERSIONS = {
+  v3: {
+    'tailwindcss': '^3.4.17',
+    'autoprefixer': '^10.4.21',
+    'postcss': '^8.5.6',
+    'tailwindcss-animate': '^1.0.7'
+  },
+  v4: {
+    'tailwindcss': '^4.0.0-beta.24',
+    '@tailwindcss/vite': '^4.0.0-beta.24'
+  }
+};
+
 const OPTIONAL_PACKAGES = {
   icons: {
     '@heroicons/react': '^2.2.0',
@@ -49,8 +62,14 @@ const OPTIONAL_PACKAGES = {
     'chroma-js': '3.1.2'
   },
   ui: {
-    '@heroui/react': '^2.8.2',
-    '@radix-ui/react-dialog': '^1.1.15'
+    v3: {
+      '@heroui/react': '^2.8.2',
+      '@radix-ui/react-dialog': '^1.1.15'
+    },
+    v4: {
+      '@heroui/react': '^2.8.2',
+      '@radix-ui/react-dialog': '^1.1.15'
+    }
   },
   shadcnUI: {
     '@radix-ui/react-slot': '^1.1.0',
@@ -174,6 +193,9 @@ async function main() {
   
   console.log(`✅ Using ${packageManager} for package management\n`);
 
+  // Tailwind version selection
+  const tailwindVersion = await selectTailwindVersion();
+
   // Interactive package selection
   const selectedPackages = await selectPackages();
 
@@ -185,9 +207,27 @@ async function main() {
   copyDirectory(templatePath, projectPath);
 
   // Clean up template-specific files and update package.json
-  await setupProject(projectPath, selectedPackages, packageManager);
+  await setupProject(projectPath, selectedPackages, packageManager, tailwindVersion);
 
   rl.close();
+}
+
+async function selectTailwindVersion() {
+  console.log('🎨 TAILWIND CSS VERSION:');
+  console.log('  1. Tailwind CSS v3 (stable, widely supported)');
+  console.log('  2. Tailwind CSS v4 (beta, modern features)');
+  
+  const versionChoice = await question('  Choose Tailwind version [1-2]: ');
+  
+  switch (versionChoice) {
+    case '2':
+      console.log('✅ Selected Tailwind CSS v4 (beta)\n');
+      return 'v4';
+    case '1':
+    default:
+      console.log('✅ Selected Tailwind CSS v3 (stable)\n');
+      return 'v3';
+  }
 }
 
 async function selectPackages() {
@@ -272,7 +312,7 @@ async function selectShadcnComponents() {
   return selectedComponents;
 }
 
-async function setupProject(projectPath, selectedPackages, packageManager) {
+async function setupProject(projectPath, selectedPackages, packageManager, tailwindVersion) {
   console.log('🧹 Cleaning up template files...');
   
   // Clean up template-specific files
@@ -309,6 +349,22 @@ async function setupProject(projectPath, selectedPackages, packageManager) {
   packageJson.description = `A Next.js application: ${projectName}`;
   packageJson.author = 'Your Name <your.email@example.com>';
 
+  // Handle Tailwind CSS version
+  // Remove existing Tailwind packages
+  delete packageJson.dependencies.tailwindcss;
+  delete packageJson.dependencies.autoprefixer;
+  delete packageJson.dependencies.postcss;
+  delete packageJson.dependencies['@tailwindcss/vite'];
+  delete packageJson.devDependencies.tailwindcss;
+  delete packageJson.devDependencies.autoprefixer;
+  delete packageJson.devDependencies.postcss;
+  delete packageJson.devDependencies['@tailwindcss/vite'];
+
+  // Add selected Tailwind version packages
+  Object.entries(TAILWIND_VERSIONS[tailwindVersion]).forEach(([pkg, version]) => {
+    packageJson.devDependencies[pkg] = version;
+  });
+
   // Remove all optional packages first
   Object.values(OPTIONAL_PACKAGES).forEach(packages => {
     Object.keys(packages).forEach(pkg => {
@@ -320,13 +376,28 @@ async function setupProject(projectPath, selectedPackages, packageManager) {
   // Add selected packages back
   Object.entries(selectedPackages).forEach(([category, isSelected]) => {
     if (isSelected && OPTIONAL_PACKAGES[category]) {
-      Object.entries(OPTIONAL_PACKAGES[category]).forEach(([pkg, version]) => {
-        if (pkg === '@tanstack/react-query-devtools') {
-          packageJson.devDependencies[pkg] = version;
-        } else {
-          packageJson.dependencies[pkg] = version;
-        }
-      });
+      const packages = OPTIONAL_PACKAGES[category];
+      
+      // Handle packages that have different versions for Tailwind v3/v4
+      if (packages.v3 && packages.v4) {
+        const versionedPackages = packages[tailwindVersion] || packages.v3;
+        Object.entries(versionedPackages).forEach(([pkg, version]) => {
+          if (pkg === '@tanstack/react-query-devtools') {
+            packageJson.devDependencies[pkg] = version;
+          } else {
+            packageJson.dependencies[pkg] = version;
+          }
+        });
+      } else {
+        // Handle regular packages
+        Object.entries(packages).forEach(([pkg, version]) => {
+          if (pkg === '@tanstack/react-query-devtools') {
+            packageJson.devDependencies[pkg] = version;
+          } else {
+            packageJson.dependencies[pkg] = version;
+          }
+        });
+      }
     }
   });
 
@@ -345,9 +416,12 @@ async function setupProject(projectPath, selectedPackages, packageManager) {
     console.error(`⚠️  Failed to install dependencies. Please run ${getInstallCommand(packageManager)} manually.`);
   }
 
+  // Setup Tailwind configuration
+  await setupTailwindConfig(projectPath, tailwindVersion, selectedPackages);
+
   // Setup ShadCN UI if selected
   if (selectedPackages.shadcnUI) {
-    await setupShadcnUI(projectPath, selectedPackages, packageManager);
+    await setupShadcnUI(projectPath, selectedPackages, packageManager, tailwindVersion);
   }
 
   console.log('');
@@ -368,20 +442,249 @@ async function setupProject(projectPath, selectedPackages, packageManager) {
   console.log('Happy coding! 🎉');
 }
 
-async function setupShadcnUI(projectPath, selectedPackages, packageManager) {
+async function setupTailwindConfig(projectPath, tailwindVersion, selectedPackages) {
+  console.log(`🎨 Setting up Tailwind CSS ${tailwindVersion}...`);
+
+  if (tailwindVersion === 'v4') {
+    // Tailwind CSS v4 setup
+    await setupTailwindV4(projectPath, selectedPackages);
+  } else {
+    // Tailwind CSS v3 setup (default)
+    await setupTailwindV3(projectPath, selectedPackages);
+  }
+
+  console.log(`✅ Tailwind CSS ${tailwindVersion} configured!`);
+}
+
+async function setupTailwindV3(projectPath, selectedPackages) {
+  // Create tailwind.config.js for v3
+  const tailwindConfig = `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")${selectedPackages.ui ? ', require("@tailwindcss/forms")' : ''}],
+}`;
+
+  fs.writeFileSync(path.join(projectPath, 'tailwind.config.js'), tailwindConfig);
+
+  // Create/update postcss.config.mjs
+  const postcssConfig = `export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}`;
+
+  fs.writeFileSync(path.join(projectPath, 'postcss.config.mjs'), postcssConfig);
+}
+
+async function setupTailwindV4(projectPath, selectedPackages) {
+  // Tailwind v4 uses CSS-based configuration
+  const globalsPath = path.join(projectPath, 'src', 'app', 'globals.css');
+  let globalsContent = fs.readFileSync(globalsPath, 'utf8');
+  
+  // Replace existing Tailwind imports with v4 syntax
+  globalsContent = globalsContent.replace(
+    /@tailwind base;\n@tailwind components;\n@tailwind utilities;/g,
+    '@import "tailwindcss";'
+  );
+
+  // Add Tailwind v4 theme configuration
+  const tailwindV4Config = `
+@theme {
+  --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  
+  --color-border: oklch(0.5 0.1 0);
+  --color-input: oklch(0.5 0.1 0);
+  --color-ring: oklch(0.3 0.2 0);
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.15 0.05 0);
+  
+  --color-primary: oklch(0.3 0.2 0);
+  --color-primary-foreground: oklch(0.98 0.01 0);
+  
+  --color-secondary: oklch(0.96 0.01 0);
+  --color-secondary-foreground: oklch(0.3 0.2 0);
+  
+  --color-destructive: oklch(0.6 0.2 0);
+  --color-destructive-foreground: oklch(0.98 0.01 0);
+  
+  --color-muted: oklch(0.96 0.01 0);
+  --color-muted-foreground: oklch(0.5 0.1 0);
+  
+  --color-accent: oklch(0.96 0.01 0);
+  --color-accent-foreground: oklch(0.3 0.2 0);
+  
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.15 0.05 0);
+  
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.15 0.05 0);
+  
+  --radius: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: oklch(0.15 0.05 0);
+    --color-foreground: oklch(0.98 0.01 0);
+    --color-card: oklch(0.15 0.05 0);
+    --color-card-foreground: oklch(0.98 0.01 0);
+    --color-popover: oklch(0.15 0.05 0);
+    --color-popover-foreground: oklch(0.98 0.01 0);
+    --color-primary: oklch(0.98 0.01 0);
+    --color-primary-foreground: oklch(0.3 0.2 0);
+    --color-secondary: oklch(0.2 0.1 0);
+    --color-secondary-foreground: oklch(0.98 0.01 0);
+    --color-muted: oklch(0.2 0.1 0);
+    --color-muted-foreground: oklch(0.65 0.1 0);
+    --color-accent: oklch(0.2 0.1 0);
+    --color-accent-foreground: oklch(0.98 0.01 0);
+    --color-destructive: oklch(0.3 0.2 0);
+    --color-destructive-foreground: oklch(0.98 0.01 0);
+    --color-border: oklch(0.2 0.1 0);
+    --color-input: oklch(0.2 0.1 0);
+    --color-ring: oklch(0.83 0.05 0);
+  }
+}`;
+
+  // Only add v4 config if not already present
+  if (!globalsContent.includes('@theme {')) {
+    globalsContent += tailwindV4Config;
+  }
+
+  fs.writeFileSync(globalsPath, globalsContent);
+
+  // Create next.config.ts with Tailwind v4 integration
+  const nextConfigPath = path.join(projectPath, 'next.config.ts');
+  let nextConfig = fs.readFileSync(nextConfigPath, 'utf8');
+  
+  // Add Tailwind v4 plugin to next.config.ts
+  if (!nextConfig.includes('@tailwindcss/vite')) {
+    nextConfig = nextConfig.replace(
+      'import type { NextConfig } from "next";',
+      `import type { NextConfig } from "next";
+import tailwindcss from '@tailwindcss/vite';`
+    );
+
+    nextConfig = nextConfig.replace(
+      'const nextConfig: NextConfig = {',
+      `const nextConfig: NextConfig = {
+  experimental: {
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },`
+    );
+
+    // Add webpack configuration for Tailwind v4
+    nextConfig = nextConfig.replace(
+      'export default nextConfig;',
+      `  webpack: (config) => {
+    config.plugins?.push(tailwindcss());
+    return config;
+  },
+};
+
+export default nextConfig;`
+    );
+
+    fs.writeFileSync(nextConfigPath, nextConfig);
+  }
+}
+
+async function setupShadcnUI(projectPath, selectedPackages, packageManager, tailwindVersion) {
   console.log('🎨 Setting up ShadCN UI...');
 
-  // Create components.json for ShadCN
+  // Create components.json for ShadCN with Tailwind version-specific config
   const componentsConfig = {
     "$schema": "https://ui.shadcn.com/schema.json",
     "style": "default",
     "rsc": true,
     "tsx": true,
     "tailwind": {
-      "config": "tailwind.config.js",
+      "config": tailwindVersion === 'v4' ? "src/app/globals.css" : "tailwind.config.js",
       "css": "src/app/globals.css",
       "baseColor": "slate",
       "cssVariables": true,
+      "cssVariablesPrefix": tailwindVersion === 'v4' ? "--color-" : "",
       "prefix": ""
     },
     "aliases": {
@@ -410,11 +713,12 @@ export function cn(...inputs: ClassValue[]) {
   
   fs.writeFileSync(path.join(libDir, 'utils.ts'), utilsContent);
 
-  // Update globals.css with ShadCN styles
-  const globalsPath = path.join(projectPath, 'src', 'app', 'globals.css');
-  let globalsContent = fs.readFileSync(globalsPath, 'utf8');
-  
-  const shadcnStyles = `
+  // Update globals.css with ShadCN styles (only for v3, v4 already has colors configured)
+  if (tailwindVersion === 'v3') {
+    const globalsPath = path.join(projectPath, 'src', 'app', 'globals.css');
+    let globalsContent = fs.readFileSync(globalsPath, 'utf8');
+    
+    const shadcnStylesV3 = `
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -472,10 +776,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 `;
 
-  // Add ShadCN styles to globals.css if not already present
-  if (!globalsContent.includes('--background:')) {
-    globalsContent += shadcnStyles;
-    fs.writeFileSync(globalsPath, globalsContent);
+    // Add ShadCN styles to globals.css if not already present
+    if (!globalsContent.includes('--background:')) {
+      globalsContent += shadcnStylesV3;
+      fs.writeFileSync(globalsPath, globalsContent);
+    }
   }
 
   // Install selected ShadCN components

@@ -4,9 +4,13 @@
       "Bash(git remote add:*)",
       "Bash(git push:*)",
       "Bash(npm search:*)",
-      "Bash(npm view:*)"
+      "Bash(npm view:*)",
+      "Bash(npm publish:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "D:\\next-apps"
+    ]
   }
 }
