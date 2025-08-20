@@ -5,7 +5,9 @@
       "Bash(git push:*)",
       "Bash(npm search:*)",
       "Bash(npm view:*)",
-      "Bash(npm publish:*)"
+      "Bash(npm publish:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": [],

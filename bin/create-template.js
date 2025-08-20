@@ -6,6 +6,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import readline from 'readline';
 
+// Enable keypress events
+readline.emitKeypressEvents(process.stdin);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,6 +29,60 @@ const rl = readline.createInterface({
 const question = (prompt) => {
   return new Promise((resolve) => {
     rl.question(prompt, resolve);
+  });
+};
+
+const createInteractiveMenu = (title, options, defaultIndex = 0) => {
+  return new Promise((resolve) => {
+    let selectedIndex = defaultIndex;
+    
+    const displayMenu = () => {
+      // Clear screen and move cursor to top
+      console.clear();
+      console.log('\n🚀 Welcome to Next.js App Template Generator!\n');
+      console.log(`Creating a new Next.js app: ${projectName}\n`);
+      
+      console.log(title);
+      options.forEach((option, index) => {
+        const prefix = index === selectedIndex ? '❯' : ' ';
+        const style = index === selectedIndex ? '\x1b[36m\x1b[1m' : '\x1b[0m'; // Cyan and bold for selected
+        const reset = '\x1b[0m';
+        console.log(`${prefix} ${style}${option}${reset}`);
+      });
+      console.log('\n↑↓ Navigate • Enter to select');
+    };
+
+    const handleKeypress = (str, key) => {
+      if (key.ctrl && key.name === 'c') {
+        process.exit(0);
+      }
+
+      switch (key.name) {
+        case 'up':
+          selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : options.length - 1;
+          displayMenu();
+          break;
+        case 'down':
+          selectedIndex = selectedIndex < options.length - 1 ? selectedIndex + 1 : 0;
+          displayMenu();
+          break;
+        case 'return':
+          process.stdin.removeListener('keypress', handleKeypress);
+          process.stdin.setRawMode(false);
+          process.stdin.pause();
+          resolve(selectedIndex);
+          break;
+      }
+    };
+
+    // Enable raw mode and keypress events
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('keypress', handleKeypress);
+
+    // Display initial menu
+    displayMenu();
   });
 };
 
@@ -177,18 +234,15 @@ async function main() {
   let packageManager = detectedPM;
   
   if (useDifferentPM.toLowerCase() === 'n') {
-    console.log('\n📦 Available package managers:');
-    console.log('  1. bun (fastest)');
-    console.log('  2. yarn (stable)');
-    console.log('  3. npm (default)');
+    const pmOptions = [
+      'bun (fastest)',
+      'yarn (stable)', 
+      'npm (default)'
+    ];
     
-    const pmChoice = await question('  Choose package manager [1-3]: ');
-    switch (pmChoice) {
-      case '1': packageManager = 'bun'; break;
-      case '2': packageManager = 'yarn'; break;
-      case '3': packageManager = 'npm'; break;
-      default: packageManager = detectedPM; break;
-    }
+    const selectedPMIndex = await createInteractiveMenu('📦 Choose your package manager:', pmOptions, 0);
+    const pmMappings = ['bun', 'yarn', 'npm'];
+    packageManager = pmMappings[selectedPMIndex];
   }
   
   console.log(`✅ Using ${packageManager} for package management\n`);
@@ -213,21 +267,22 @@ async function main() {
 }
 
 async function selectTailwindVersion() {
-  console.log('🎨 TAILWIND CSS VERSION:');
-  console.log('  1. Tailwind CSS v3 (stable, widely supported)');
-  console.log('  2. Tailwind CSS v4 (beta, modern features)');
+  const tailwindOptions = [
+    'Tailwind CSS v3 (stable, widely supported)',
+    'Tailwind CSS v4 (beta, modern features)'
+  ];
   
-  const versionChoice = await question('  Choose Tailwind version [1-2]: ');
+  const selectedTailwindIndex = await createInteractiveMenu('🎨 Choose Tailwind CSS version:', tailwindOptions, 0);
   
-  switch (versionChoice) {
-    case '2':
-      console.log('✅ Selected Tailwind CSS v4 (beta)\n');
-      return 'v4';
-    case '1':
-    default:
-      console.log('✅ Selected Tailwind CSS v3 (stable)\n');
-      return 'v3';
-  }
+  const version = selectedTailwindIndex === 1 ? 'v4' : 'v3';
+  const versionName = selectedTailwindIndex === 1 ? 'Tailwind CSS v4 (beta)' : 'Tailwind CSS v3 (stable)';
+  
+  console.clear();
+  console.log('\n🚀 Welcome to Next.js App Template Generator!\n');
+  console.log(`Creating a new Next.js app: ${projectName}\n`);
+  console.log(`✅ Selected ${versionName}\n`);
+  
+  return version;
 }
 
 async function selectPackages() {
@@ -276,12 +331,17 @@ async function selectPackages() {
   selections.shadcnUI = useShadcn.toLowerCase() !== 'n';
   
   if (selections.shadcnUI) {
-    console.log('\n🧩 ShadCN Components:');
-    const componentChoice = await question('  1. All components\n  2. Select specific components\n  3. Skip components (setup only)\n  Choose [1-3]: ');
+    const componentOptions = [
+      'All components',
+      'Select specific components',
+      'Skip components (setup only)'
+    ];
     
-    if (componentChoice === '1') {
+    const componentChoiceIndex = await createInteractiveMenu('🧩 ShadCN Components:', componentOptions, 0);
+    
+    if (componentChoiceIndex === 0) {
       selections.shadcnComponents = Object.keys(SHADCN_COMPONENTS);
-    } else if (componentChoice === '2') {
+    } else if (componentChoiceIndex === 1) {
       selections.shadcnComponents = await selectShadcnComponents();
     } else {
       selections.shadcnComponents = [];
@@ -296,18 +356,82 @@ async function selectPackages() {
   return selections;
 }
 
+const createMultiSelectMenu = (title, options) => {
+  return new Promise((resolve) => {
+    let selectedIndex = 0;
+    let selectedItems = new Set();
+    
+    const displayMenu = () => {
+      console.clear();
+      console.log('\n🚀 Welcome to Next.js App Template Generator!\n');
+      console.log(`Creating a new Next.js app: ${projectName}\n`);
+      
+      console.log(title);
+      console.log('(Use ↑↓ to navigate, Space to toggle, Enter to confirm)\n');
+      
+      options.forEach((option, index) => {
+        const prefix = index === selectedIndex ? '❯' : ' ';
+        const checkbox = selectedItems.has(index) ? '☑' : '☐';
+        const style = index === selectedIndex ? '\x1b[36m\x1b[1m' : '\x1b[0m';
+        const reset = '\x1b[0m';
+        console.log(`${prefix} ${checkbox} ${style}${option}${reset}`);
+      });
+      
+      console.log(`\n${selectedItems.size} selected • ↑↓ Navigate • Space Toggle • Enter Confirm`);
+    };
+
+    const handleKeypress = (str, key) => {
+      if (key.ctrl && key.name === 'c') {
+        process.exit(0);
+      }
+
+      switch (key.name) {
+        case 'up':
+          selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : options.length - 1;
+          displayMenu();
+          break;
+        case 'down':
+          selectedIndex = selectedIndex < options.length - 1 ? selectedIndex + 1 : 0;
+          displayMenu();
+          break;
+        case 'space':
+          if (selectedItems.has(selectedIndex)) {
+            selectedItems.delete(selectedIndex);
+          } else {
+            selectedItems.add(selectedIndex);
+          }
+          displayMenu();
+          break;
+        case 'return':
+          process.stdin.removeListener('keypress', handleKeypress);
+          process.stdin.setRawMode(false);
+          process.stdin.pause();
+          resolve(Array.from(selectedItems));
+          break;
+      }
+    };
+
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('keypress', handleKeypress);
+
+    displayMenu();
+  });
+};
+
 async function selectShadcnComponents() {
-  console.log('\n🧩 Select ShadCN components to include:\n');
-  const selectedComponents = [];
-  
   const componentEntries = Object.entries(SHADCN_COMPONENTS);
-  for (let i = 0; i < componentEntries.length; i++) {
-    const [key, component] = componentEntries[i];
-    const include = await question(`  Include ${component.name}? [y/N]: `);
-    if (include.toLowerCase() === 'y') {
-      selectedComponents.push(key);
-    }
-  }
+  const componentNames = componentEntries.map(([key, component]) => component.name);
+  
+  const selectedIndices = await createMultiSelectMenu('🧩 Select ShadCN components to include:', componentNames);
+  
+  const selectedComponents = selectedIndices.map(index => componentEntries[index][0]);
+  
+  console.clear();
+  console.log('\n🚀 Welcome to Next.js App Template Generator!\n');
+  console.log(`Creating a new Next.js app: ${projectName}\n`);
+  console.log(`✅ Selected ${selectedComponents.length} ShadCN components\n`);
   
   return selectedComponents;
 }
