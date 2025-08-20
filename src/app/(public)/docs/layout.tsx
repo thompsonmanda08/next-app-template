@@ -5,7 +5,7 @@ import Logo from '@/components/base/logo';
 import Search from '@/components/ui/search';
 
 import DocsMobileNav from './_components/docs-mobile-nav';
-import { Footer } from '@/components/landing-sections/footer';
+import { Footer } from '@/components/elements/footer';
 
 export default function DocsLayout({ children }: PropsWithChildren) {
   return (

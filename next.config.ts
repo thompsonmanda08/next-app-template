@@ -1,7 +1,6 @@
-import { withSentryConfig } from '@sentry/nextjs';
 import { NextConfig } from 'next';
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   output: 'standalone',
   assetPrefix: process.env.SERVER_URL || process.env.NEXT_PUBLIC_SERVER_URL,
   compress: false, // Disable compression - let reverse proxy handle it
@@ -23,12 +22,13 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'bgspayboss.com',
-        port: '',
-        pathname: '/**',
-      },
+      // Add your custom domains here
+      // {
+      //   protocol: 'https',
+      //   hostname: 'yourdomain.com',
+      //   port: '',
+      //   pathname: '/**',
+      // },
     ],
   },
   turbopack: {
@@ -46,10 +46,10 @@ const nextConfig = {
     serverActions: {
       enabled: true,
       bodySizeLimit: process.env.MAX_FILE_SIZE_LIMIT || '60mb',
-      allowedOrigins: ['bgspayboss.com', '*.bgspayboss.com'],
+      allowedOrigins: ['localhost', '*.localhost'],
     },
 
-    optimizePackageImports: ['lucide-react', '@heroicons/react'], // Optimize chunk splitting
+    optimizePackageImports: ['lucide-react'], // Optimize chunk splitting
   },
 
   // Disable webpack cache if causing issues
@@ -130,37 +130,6 @@ const nextConfig = {
       },
     ];
   },
-} as NextConfig;
+};
 
-export default withSentryConfig(nextConfig, {
-  // For all available options, see:
-  // https://www.npmjs.com/package/@sentry/webpack-plugin#options
-
-  org: 'sentry',
-  project: 'merchant-web-portal',
-  sentryUrl: process.env.SENTRY_URL,
-
-  // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
-
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-  // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
-
-  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-  // This can increase your server load as well as your hosting bill.
-  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-  // side errors will fail.
-  tunnelRoute: '/monitoring',
-
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
-
-  // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true,
-});
+export default nextConfig;

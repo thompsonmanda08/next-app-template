@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircleIcon, ExclamationCircleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircle, AlertCircle, Info, XCircle } from 'lucide-react';
 
 interface StatusMessageProps {
   type: 'success' | 'error' | 'warning' | 'info';
@@ -19,10 +19,10 @@ export default function StatusMessage({ type, title, message, className = "" }: 
   };
 
   const icons = {
-    success: <CheckCircleIcon className="h-5 w-5" />,
-    error: <XCircleIcon className="h-5 w-5" />,
-    warning: <ExclamationCircleIcon className="h-5 w-5" />,
-    info: <InformationCircleIcon className="h-5 w-5" />
+    success: <CheckCircle className="h-5 w-5" />,
+    error: <XCircle className="h-5 w-5" />,
+    warning: <AlertCircle className="h-5 w-5" />,
+    info: <Info className="h-5 w-5" />
   };
 
   return (

@@ -1,5 +1,5 @@
 'use client';
-import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -27,9 +27,9 @@ function ThemeSwitcher({ className }: { className?: string }) {
       }}
     >
       {theme === 'light' ? (
-        <MoonIcon className="p-0.5 w-6 aspect-square" />
+        <Moon className="p-0.5 w-6 aspect-square" />
       ) : (
-        <SunIcon className="p-0.5 w-6 aspect-square" />
+        <Sun className="p-0.5 w-6 aspect-square" />
       )}
     </NavIconButton>
   );

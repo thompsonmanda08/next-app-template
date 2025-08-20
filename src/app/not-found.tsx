@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-import { Footer } from '@/components/landing-sections/footer';
+import { Footer } from '@/components/elements/footer';
 import { Button } from '@/components/ui/button';
 import { DefaultCover } from '@/lib/constants';
 

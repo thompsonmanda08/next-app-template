@@ -1,9 +1,9 @@
 'use client';
 import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-} from '@heroicons/react/24/outline';
+  ChevronDown,
+  ChevronRight,
+  MoreHorizontal,
+} from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,
@@ -52,7 +52,7 @@ export default function DropdownButton({
           variant="bordered"
         >
           {children || selectedValue || (
-            <EllipsisHorizontalIcon className="h-6 w-6 text-foreground/50" />
+            <MoreHorizontal className="h-6 w-6 text-foreground/50" />
           )}
         </Button>
       </DropdownTrigger>
@@ -81,7 +81,7 @@ export default function DropdownButton({
             description={item?.description}
             endContent={
               item?.subMenuItems?.length > 0 ? (
-                <ChevronRightIcon className="aspect-square h-5 w-5" />
+                <ChevronRight className="aspect-square h-5 w-5" />
               ) : (
                 item?.endContent || undefined
               )
@@ -183,7 +183,7 @@ export function SingleSelectionDropdown({
         <Button
           className={cn(buttonClasses, trigger)}
           endContent={
-            <ChevronDownIcon
+            <ChevronDown
               className={cn(
                 'h-4 w-4  focus-within:rotate-180 focus:rotate-180 ',
                 chevronIcon,
@@ -264,7 +264,7 @@ export function SimpleDropdown({
           className={cn(buttonClasses, trigger)}
           color={color}
           endContent={
-            <ChevronDownIcon
+            <ChevronDown
               className={cn(
                 'h-4 w-4 focus-within:rotate-180 focus:rotate-180 ',
                 chevronIcon,

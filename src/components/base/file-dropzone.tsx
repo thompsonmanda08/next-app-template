@@ -2,11 +2,11 @@
 'use client';
 
 import {
-  CheckCircleIcon,
-  CloudArrowUpIcon,
-  DocumentArrowUpIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+  CheckCircle,
+  CloudArrowUp,
+  FileUp,
+  X,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import * as React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
@@ -259,7 +259,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                 'w-full flex-row items-center justify-between ': isLandscape,
               })}
             >
-              <DocumentArrowUpIcon
+              <FileUp
                 className={cn('absolute -z-0 h-24 w-24  text-gray-200', {
                   'm-0 h-8 w-8': isLandscape,
                 })}
@@ -275,13 +275,13 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                 {!isLandscape && (
                   // ONLY SHOWS ON THE UPRIGHT COMPONENT
                   <p className="flex items-center gap-2 font-bold uppercase">
-                    <CheckCircleIcon className="h-7 w-7 font-bold text-green-500" />
+                    <CheckCircle className="h-7 w-7 font-bold text-green-500" />
                     Your file is ready
                   </p>
                 )}
                 <span className="flex items-center w-full gap-2 font-semibold text-xs lg:text-sm max-w-sm truncate text-primary">
                   {isLandscape && (
-                    <CheckCircleIcon className="h-6 w-6 text-green-500" />
+                    <CheckCircle className="h-6 w-6 text-green-500" />
                   )}{' '}
                   {acceptedFiles[0]?.name || file?.name}
                 </span>
@@ -292,7 +292,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                   </Button>
                 )}
                 {isLandscape && (
-                  <XMarkIcon className="absolute -right-0 aspect-square w-5 rounded-md bg-red-100 p-0.5 text-red-500 hover:text-red-500" />
+                  <X className="absolute -right-0 aspect-square w-5 rounded-md bg-red-100 p-0.5 text-red-500 hover:text-red-500" />
                 )}
               </div>
             </div>
@@ -311,7 +311,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                   'flex-row gap-2 font-medium': isLandscape,
                 })}
               >
-                <CloudArrowUpIcon
+                <CloudArrowUp
                   className={cn('mb-2 h-12 w-12', { 'm-0 w-8': isLandscape })}
                 />
                 <div className="text-gray-400">
@@ -339,7 +339,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
               }}
             >
               <div className="flex h-5 w-5 items-center justify-center rounded-md border border-solid border-gray-500 bg-background transition-all duration-300 hover:h-6 hover:w-6 dark:border-gray-400 dark:bg-black">
-                <XMarkIcon
+                <X
                   className="text-gray-500 dark:text-gray-400"
                   height={16}
                   width={16}

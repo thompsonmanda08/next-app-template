@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { PropsWithChildren } from 'react';
 
-import { Footer } from '@/components/landing-sections/footer';
+import { Footer } from '@/components/elements/footer';
 import { DefaultCover } from '@/lib/constants';
 
 async function AuthLayout({ children }: PropsWithChildren) {

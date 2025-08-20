@@ -1,11 +1,11 @@
 'use client';
 import {
-  ChatBubbleLeftRightIcon,
-  MoonIcon,
-  PowerIcon,
-  SunIcon,
-  WalletIcon,
-} from '@heroicons/react/24/outline';
+  MessageSquare,
+  Moon,
+  Power,
+  Sun,
+  Wallet,
+} from 'lucide-react';
 import {
   Dropdown,
   DropdownTrigger,
@@ -92,7 +92,7 @@ export default function TopNavBar({ user }: any) {
                   'rounded-lg w-9 h-9 grid place-items-center aspect-square bg-primary',
                 )}
               >
-                <WalletIcon className="h-5 w-5 text-white" />
+                <Wallet className="h-5 w-5 text-white" />
               </span>
 
               <div className="flex flex-col items-start gap-1 ">
@@ -228,10 +228,10 @@ export function AvatarDropdown({
               <Switch
                 defaultSelected
                 color="primary"
-                endContent={<MoonIcon />}
+                endContent={<Moon />}
                 isSelected={isSelected}
                 size="md"
-                startContent={<SunIcon />}
+                startContent={<Sun />}
                 onValueChange={(value) => {
                   setIsSelected(value);
                   setTheme(value ? 'dark' : 'light');
@@ -251,7 +251,7 @@ export function AvatarDropdown({
             <div className="flex items-center justify-between">
               <span> Help & Support</span>{' '}
               <NavIconButton className={'scale-90'}>
-                <ChatBubbleLeftRightIcon className="h-5 w-5" />
+                <MessageSquare className="h-5 w-5" />
               </NavIconButton>
             </div>
           </DropdownItem>
@@ -271,7 +271,7 @@ export function AvatarDropdown({
                   queryClient.invalidateQueries();
                 }}
               >
-                <PowerIcon className="h-5 w-5 text-white" />
+                <Power className="h-5 w-5 text-white" />
               </NavIconButton>
             </div>
           </DropdownItem>

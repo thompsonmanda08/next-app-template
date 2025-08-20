@@ -13,7 +13,7 @@ A modern, production-ready Next.js 15 template with TypeScript, Tailwind CSS, an
 - 🔐 **Authentication Ready** - Auth components and layouts
 - 📱 **Responsive Design** - Mobile-first approach
 - 🌙 **Dark Mode** - Theme switching support
-- 📊 **Charts Integration** - Chart.js support
+- 📊 **Data Visualization** - Ready for chart integration
 - 🔄 **State Management** - Zustand integration
 - 🛠 **Development Tools** - ESLint, Prettier, TypeScript
 - 🐳 **Docker Ready** - Production-ready Dockerfile
@@ -108,7 +108,7 @@ docker run -p 3000:3000 my-app:1.0.0
 - **Data Fetching**: TanStack Query
 - **Forms**: React Hook Form ready
 - **Animation**: Framer Motion
-- **Charts**: Chart.js + React Chart.js 2
+- **Icons**: Lucide React
 - **Development**: ESLint + Prettier + TypeScript
 
 ## Contributing

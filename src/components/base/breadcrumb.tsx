@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronRight } from 'lucide-react';
 
 interface BreadcrumbItem {
   label: string;
@@ -20,7 +20,7 @@ export default function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
             {index > 0 && (
-              <ChevronRightIcon className="h-4 w-4 text-gray-400 mx-2" />
+              <ChevronRight className="h-4 w-4 text-gray-400 mx-2" />
             )}
             {item.href && !item.current ? (
               <Link 

@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
@@ -46,7 +46,7 @@ function ProgressStep({
               )}
             >
               {currentTabIndex >= index + 1 ? (
-                <CheckCircleIcon className="p-0.5" />
+                <CheckCircle className="p-0.5" />
               ) : (
                 `${index + 1}`
               )}

@@ -1,4 +1,4 @@
-import { EyeIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { Eye, Filter } from 'lucide-react';
 import {
   Table,
   TableHeader,
@@ -278,7 +278,7 @@ export default function CustomTable({
               setOpenBatchDetailsModal(true);
             }}
           >
-            <EyeIcon className="h-6 w-5" />
+            <Eye className="h-6 w-5" />
           </Button>
         );
 
@@ -323,7 +323,7 @@ export default function CustomTable({
                 name={'Status'}
                 selectedKeys={statusFilter}
                 selectionMode="multiple"
-                startContent={<FunnelIcon className="h-5 w-5" />}
+                startContent={<Filter className="h-5 w-5" />}
                 onSelectionChange={setStatusFilter}
               />
             )}

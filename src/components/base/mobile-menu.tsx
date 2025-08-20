@@ -1,5 +1,5 @@
 'use client';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import Logo from '@/components/base/logo';
@@ -54,7 +54,7 @@ function MobileNavBar({
           className="absolute right-0 mr-2 mt-1 max-w-fit p-2"
           onClick={toggleMobileMenu}
         >
-          <XMarkIcon className="h-5 w-5 text-slate-600 transition-all duration-200 ease-in hover:text-primary/80" />
+          <X className="h-5 w-5 text-slate-600 transition-all duration-200 ease-in hover:text-primary/80" />
         </button>
         <div className="flex h-full w-full flex-col">
           <div className="-ml-2 scale-[0.9] md:ml-0">

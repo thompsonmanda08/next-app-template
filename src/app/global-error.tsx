@@ -1,21 +1,20 @@
 'use client';
 
-import * as Sentry from '@sentry/nextjs';
 import NextError from 'next/error';
 import { useEffect } from 'react';
 
 export default function GlobalError({ error }: { error: Error }) {
   useEffect(() => {
-    Sentry.captureException(error);
+    // Log error to console in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Global error:', error);
+    }
+    // Add your error reporting service here
   }, [error]);
 
   return (
     <html>
       <body>
-        {/* `NextError` is the default Next.js error page component. Its type
-        definition requires a `statusCode` prop. However, since the App Router
-        does not expose status codes for errors, we simply pass 0 to render a
-        generic error message. */}
         <NextError statusCode={error ? 500 : 0} />
       </body>
     </html>
