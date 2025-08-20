@@ -37,8 +37,8 @@ export default function RegisterPage() {
       )}
 
       {/********************* REGISTER FORM *********************/}
-      <SignUpForm />
-      {/* {isAccountCreated ? <AccountCreatedSuccess /> : <SignUpForm />} */}
+
+      {isAccountCreated ? <AccountCreatedSuccess /> : <SignUpForm />}
       {/********************* REGISTER FORM *********************/}
 
       <div className="mt-8 text-center">

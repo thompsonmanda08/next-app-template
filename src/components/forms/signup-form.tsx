@@ -69,7 +69,7 @@ export default function SignUpForm() {
         title: 'Success',
         description: 'Account created successfully!',
       });
-      router.push('/login');
+      router.push('/register?account_created=true');
     } else {
       setError({ status: true, message: response?.message });
       setIsLoading(false);
@@ -163,7 +163,7 @@ const Step2 = ({
 
   return (
     <>
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
+      <div className="bg-slate-50 p-4 rounded-lg mb-6">
         <h3 className="font-medium text-black mb-2">Store Information</h3>
         <div className="text-sm text-gray-600 space-y-1">
           <p>
