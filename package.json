@@ -1,5 +1,5 @@
 {
-  "name": "next-app-template",
+  "name": "create-webbx-app",
   "version": "1.0.0",
   "private": false,
   "scripts": {
@@ -19,19 +19,19 @@
   "description": "A modern Next.js 15 template with TypeScript, Tailwind CSS, and more",
   "keywords": ["nextjs", "typescript", "tailwind", "template", "starter"],
   "browserslist": "defaults, not ie <= 11",
-  "author": "Your Name <your.email@example.com>",
+  "author": "Thompson Manda <thompsonmanda08@gmail.com>",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/next-app-template.git"
+    "url": "https://github.com/thompsonmanda08/next-app-template.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/next-app-template/issues"
+    "url": "https://github.com/thompsonmanda08/next-app-template/issues"
   },
-  "homepage": "https://github.com/yourusername/next-app-template#readme",
+  "homepage": "https://github.com/thompsonmanda08/next-app-template#readme",
   "bin": {
-    "create-next-app-template": "./bin/create-template.js"
+    "create-webbx-app": "./bin/create-template.js"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

@@ -22,7 +22,7 @@ A modern, production-ready Next.js 15 template with TypeScript, Tailwind CSS, an
 ### Using npx (Recommended)
 
 ```bash
-npx create-next-app-template my-app
+npx create-webbx-app my-app
 cd my-app
 npm run dev
 ```
@@ -30,7 +30,7 @@ npm run dev
 ### Manual Installation
 
 ```bash
-git clone https://github.com/yourusername/next-app-template.git my-app
+git clone https://github.com/thompsonmanda08/next-app-template.git my-app
 cd my-app
 npm install
 npm run dev
