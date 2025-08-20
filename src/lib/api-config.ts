@@ -3,7 +3,10 @@ import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
 import { getAuthSession } from '@/app/_actions/config-actions';
 import { APIResponse } from '@/types';
 
-import { apiClient } from './utils';
+export const apiClient = axios.create({
+  baseURL: BASE_URL,
+  timeout: 30000,
+}) as AxiosInstance;
 
 // Add response interceptor for error handling
 apiClient.interceptors.response.use(
