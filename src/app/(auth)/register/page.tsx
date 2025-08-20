@@ -4,35 +4,35 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import Logo from '@/components/base/logo';
-import EmptyState from '@/components/base/empty-state';
-import SignUpForm from '@/components/forms/signup-form';
 import { Button } from '@/components/ui/button';
-import Spinner from '@/components/ui/custom-spinner';
-import { useEffect } from 'react';
+import SignUpForm from '@/components/forms/register-form';
 
 export default function RegisterPage() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
 
-  const isAccountCreated = searchParams.get('account_created');
+  // const isAccountCreated = searchParams.get('account_created');
+  const isAccountCreated = false;
 
   // Check for success message from signup
-  useEffect(() => {
-    const success = searchParams.get('success');
-    if (success === 'true') {
-      // SET A MESSAGE HERE
-    }
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const success = searchParams.get('success');
+  //   if (success === 'true') {
+  //     // SET A MESSAGE HERE
+  //   }
+  // }, [searchParams]);
 
   return (
-    <div className="relative -mt-[260px] md:-mt-[412px] xl:-mt-[432px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none ">
+    <div className="mx-auto w-full max-w-sm flex-auto p-6">
       {!isAccountCreated && (
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-light text-black mb-2">
+          <h1 className="text-4xl font-light text-foreground mb-2">
             <span className="font-bold">Create</span> an Account
           </h1>
-          <p className="text-gray-600">Sign up to access your account</p>
+          <p className="text-muted-foreground">
+            Sign up to access your account
+          </p>
         </div>
       )}
 
@@ -42,11 +42,11 @@ export default function RegisterPage() {
       {/********************* REGISTER FORM *********************/}
 
       <div className="mt-8 text-center">
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Already have an account?{' '}
           <Link
             href="/login"
-            className="text-black font-semibold hover:underline"
+            className="text-primary font-semibold hover:underline"
           >
             Login
           </Link>

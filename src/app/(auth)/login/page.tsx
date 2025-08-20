@@ -22,10 +22,10 @@ export default function LoginPage() {
   return (
     <div className="w-full max-w-md">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-light text-black mb-2">
+        <h1 className="text-4xl font-light text-foreground mb-2">
           Welcome <span className="font-bold">Back</span>
         </h1>
-        <p className="text-gray-600">Sign in to access your account</p>
+        <p className="text-muted-foreground">Sign in to access your account</p>
       </div>
 
       {isPasswordResetComplete && (
@@ -39,11 +39,11 @@ export default function LoginPage() {
       <LoginForm />
 
       <div className="mt-8 text-center">
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Don&apos;t have an account?{' '}
           <Link
             href="/register"
-            className="text-black font-semibold hover:underline"
+            className="text-primary font-semibold hover:underline"
           >
             Register
           </Link>
@@ -53,7 +53,7 @@ export default function LoginPage() {
       <div className="mt-6 text-center">
         <Link
           href="/forgot-password"
-          className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           Forgot your password?
         </Link>

@@ -162,8 +162,12 @@
 }
 /* ************************** */
 
-.blue-gradient {
-  background: linear-gradient(90deg, #1b64ce 0%, #8c86f0 100%);
+.black-gradient {
+  background: linear-gradient(90deg, #000000 0%, #333333 100%);
+}
+
+.dark-gradient {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #333333 100%);
 }
 
 /* Chrome, Safari and Opera */

@@ -1,3 +1,4 @@
+'use client';
 import { ButtonProps, Button as NextUIButton } from '@heroui/react';
 
 import { cn } from '@/lib/utils';
@@ -5,7 +6,8 @@ import { cn } from '@/lib/utils';
 export function Button({
   children,
   loadingText,
-  size,
+  size = 'lg',
+  radius = 'md',
   className,
   ...props
 }: ButtonProps & {
@@ -18,7 +20,7 @@ export function Button({
   return (
     <NextUIButton
       className={cn('min-w-max font-semibold', className)}
-      radius="sm"
+      radius={radius}
       size={size}
       spinner={
         <svg

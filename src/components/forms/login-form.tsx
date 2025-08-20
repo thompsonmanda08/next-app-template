@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { Input } from '@/components/ui/input-field';
+import { Input } from '../ui/hero-input';
 import { LoginPayload } from '@/types/account';
 
 import { Button } from '../ui/button';
@@ -20,12 +20,40 @@ function LoginForm() {
   });
   const [error, setError] = useState<ErrorState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const updateFormData = (data: Partial<LoginPayload>) => {
     setFormData((prev) => ({
       ...prev,
       ...data,
     }));
+
+    // Clear field errors when user starts typing
+    Object.keys(data).forEach((field) => {
+      if (fieldErrors[field]) {
+        setFieldErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[field];
+          return newErrors;
+        });
+      }
+    });
+  };
+
+  const validateFields = (data: LoginPayload): Record<string, string> => {
+    const errors: Record<string, string> = {};
+
+    if (!data.email?.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    if (!data.password?.trim()) {
+      errors.password = 'Password is required';
+    }
+
+    return errors;
   };
 
   const updateError = (data: Partial<ErrorState>) => {
@@ -37,36 +65,57 @@ function LoginForm() {
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsLoading(true);
+    setError({ status: false, message: '' });
+    setFieldErrors({});
 
-    const email = formData.email;
-    const password = formData.password;
+    // Validate fields
+    const errors = validateFields(formData);
 
-    if (!email || !password) {
-      updateError({
-        onFields: true,
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setError({
         status: true,
-        message: 'Provide login credentials',
+        message: 'Please fix the errors below',
+        onFields: true,
+        fieldErrors: errors,
       });
-      setIsLoading(false);
-
       return;
     }
 
-    const response = await loginUser(formData);
+    setIsLoading(true);
 
-    if (response?.success) {
+    try {
+      const response = await loginUser(formData);
+
+      if (response?.success) {
+        addToast({
+          color: 'success',
+          title: 'Success',
+          description: 'Login successful!',
+        });
+        router.push('/home');
+      } else {
+        setError({
+          status: true,
+          message: response?.message || 'Login failed',
+        });
+        addToast({
+          color: 'danger',
+          title: 'Error',
+          description: response?.message || 'Login failed',
+        });
+      }
+    } catch (err) {
+      setError({
+        status: true,
+        message: 'An unexpected error occurred',
+      });
       addToast({
-        color: 'success',
-        title: 'Success',
-        description: 'Login successful!',
+        color: 'danger',
+        title: 'Error',
+        description: 'An unexpected error occurred',
       });
-      router.push('/home');
-    } else {
-      updateError({
-        status: !response?.success,
-        message: response?.message,
-      });
+    } finally {
       setIsLoading(false);
     }
   }
@@ -83,45 +132,50 @@ function LoginForm() {
 
   return (
     <div className="mx-auto w-full max-w-sm flex-auto p-6 ">
-      <form className="flex flex-col gap-2" role="form" onSubmit={handleLogin}>
+      <form className="flex flex-col gap-4" role="form" onSubmit={handleLogin}>
         <Input
           aria-describedby="email-addon"
           aria-label="Email"
-          isInvalid={error?.onFields}
           label="Email or Username"
-          name={'email'}
+          name="email"
+          type="email"
           placeholder="Enter your email or username"
+          value={formData.email}
           onChange={(e) => {
             updateFormData({ email: e.target.value });
           }}
+          isInvalid={!!fieldErrors.email}
+          errorText={fieldErrors.email}
+          required
         />
 
         <Input
           aria-describedby="password-addon"
           aria-label="Password"
-          isInvalid={error?.onFields}
           label="Password"
           name="password"
           placeholder="Enter Password"
           type="password"
+          value={formData.password}
           onChange={(e) => {
             updateFormData({ password: e.target.value });
           }}
+          isInvalid={!!fieldErrors.password}
+          errorText={fieldErrors.password}
+          required
         />
-        <p className="-mt-1 ml-1 text-xs font-medium text-foreground/60 xl:text-sm">
-          Forgot password?{' '}
-          <Link
-            className="text-primary hover:text-primary/80"
-            href={'/support'}
-          >
-            Contact Support
-          </Link>
-        </p>
+
         <Button
           className={'mt-4 w-full'}
           isLoading={isLoading}
           loadingText={'Signing In...'}
           type="submit"
+          disabled={
+            isLoading ||
+            !formData.email.trim() ||
+            !formData.password.trim() ||
+            Object.keys(fieldErrors).some((key) => fieldErrors[key])
+          }
         >
           Sign in
         </Button>

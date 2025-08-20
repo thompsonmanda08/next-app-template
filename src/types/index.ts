@@ -21,6 +21,8 @@ export type APIResponse = {
 export type ErrorState = {
   status?: boolean;
   message?: string;
+  onFields?: boolean;
+  fieldErrors?: Record<string, string>;
   [x: string]: any;
 };
 

@@ -1,3 +1,46 @@
+/**
+ * 🚀 ROOT LAYOUT - SEO & METADATA CONFIGURATION
+ * 
+ * This file contains all SEO and metadata settings for your Next.js application.
+ * 
+ * 📝 TO CUSTOMIZE FOR YOUR APP:
+ * 
+ * 1. 🎨 APP CONFIGURATION (Lines ~70-75):
+ *    - Update app name, description, URL, and social media handles
+ *    - Add your domain and social media images
+ * 
+ * 2. 🔍 SEO KEYWORDS (Lines ~100-110):
+ *    - Replace generic keywords with industry-specific terms
+ *    - Add your app's main features and target keywords
+ * 
+ * 3. 📱 SOCIAL MEDIA (Lines ~125-155):
+ *    - Update Open Graph and Twitter card titles/descriptions
+ *    - Add your social media image URLs (1200x630 pixels)
+ * 
+ * 4. 🎯 ICONS & FAVICONS (Lines ~160-175):
+ *    - Add your favicon files to the /public directory
+ *    - Update icon file paths and sizes
+ * 
+ * 5. 🔐 SEARCH CONSOLE (Lines ~210-215):
+ *    - Add your Google Search Console verification code
+ *    - Add other webmaster tool verification codes
+ * 
+ * 6. 📋 STRUCTURED DATA (Lines ~235-285):
+ *    - Update company information and contact details
+ *    - Add your app's features and pricing information
+ *    - Update social media profiles
+ * 
+ * 7. ⚡ PERFORMANCE (Lines ~320-330):
+ *    - Add preconnect links for external services you use
+ *    - Add DNS prefetch for better loading speed
+ * 
+ * 💡 SEO BEST PRACTICES:
+ * - Keep titles under 60 characters
+ * - Keep descriptions between 150-160 characters
+ * - Use high-quality images (1200x630 for social media)
+ * - Test with tools like Google Rich Results Test
+ */
+
 import { Metadata, Viewport } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
@@ -61,16 +104,17 @@ const inter = localFont({
   fallback: ['inter', 'system-ui', 'arial'],
 });
 
+// 🎨 CUSTOMIZE: Update these values for your application
 const description =
-  'PayBoss offers cutting-edge digital tools designed to help businesses of all sizes efficiently manage their financial inflows and outflows';
+  'A modern Next.js application built with TypeScript, Tailwind CSS, and cutting-edge web technologies';
 
 export const appConfig = {
-  name: 'PayBoss',
+  name: 'Your App Name', // 📝 Replace with your application name
   description,
-  url: 'https://bgspayboss.com',
-  ogImage: 'https://bgspayboss.com/images/screenshots/dashboard.png',
-  twitterImage: 'https://bgspayboss.com/images/screenshots/dashboard.png',
-  creator: '@PayBoss',
+  url: 'https://yourapp.com', // 🌐 Replace with your domain
+  ogImage: 'https://yourapp.com/og-image.png', // 🖼️ Replace with your Open Graph image (1200x630)
+  twitterImage: 'https://yourapp.com/twitter-image.png', // 🐦 Replace with your Twitter card image
+  creator: '@yourusername', // 📱 Replace with your Twitter handle
 };
 
 // Separate viewport export (Next.js 15+ requirement)
@@ -86,191 +130,200 @@ export const viewport: Viewport = {
   colorScheme: 'light dark',
 };
 
-// Optimized metadata for Next.js 15.3
+// 🚀 SEO OPTIMIZATION: Customize metadata for better search engine visibility
 export const metadata: Metadata = {
   metadataBase: new URL(appConfig.url),
   title: {
-    template: '%s | PayBoss - Business Payment Solutions',
-    default:
-      'PayBoss - Gateway to Simplified Business Payments & Financial Management',
+    template: '%s | Your App Name', // 📝 Customize the title template
+    default: 'Your App Name - Modern Web Application', // 🏷️ Update the default title
   },
-  description,
+  description, // 📄 Description defined above - update for your app
   keywords: [
-    'business payments',
-    'financial management',
-    'payment solutions',
-    'invoice processing',
-    'expense tracking',
-    'SMB financial tools',
-    'payment gateway',
-    'digital payments',
-    'Zambia fintech',
-    'business banking',
+    // 🔍 CUSTOMIZE: Add relevant keywords for your application
+    'nextjs',
+    'typescript',
+    'tailwind css',
+    'web application',
+    'modern ui',
+    'responsive design',
+    'your industry keywords', // Replace with industry-specific terms
+    'your product features', // Replace with your app's features
   ],
-  authors: [{ name: 'PayBoss Team', url: appConfig.url }],
-  creator: 'PayBoss',
-  publisher: 'PayBoss',
+  authors: [{ name: 'Your Name', url: appConfig.url }], // 👤 Update author info
+  creator: 'Your Name', // 👨‍💻 Your name or company
+  publisher: 'Your Company', // 🏢 Your company name
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
 
-  // Open Graph
+  // 📱 SOCIAL MEDIA: Open Graph tags for better social sharing
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'en_US', // 🌍 Update locale if targeting different regions
     url: appConfig.url,
-    title: 'PayBoss - Streamline Your Business Payments',
-    description,
+    title: 'Your App Name - Modern Web Application', // 📝 Update Open Graph title
+    description, // Uses description from above
     siteName: appConfig.name,
     images: [
       {
-        url: appConfig.ogImage,
+        url: appConfig.ogImage, // 🖼️ Must be 1200x630 pixels for optimal display
         width: 1200,
         height: 630,
-        alt: 'PayBoss - Business Payment Solutions Dashboard',
-        type: 'image/jpeg',
+        alt: 'Your App Name - Application Screenshot', // 🏷️ Update alt text
+        type: 'image/png', // 📷 Update image type if different
       },
     ],
   },
 
-  // Twitter
+  // 🐦 TWITTER: Twitter Card configuration
   twitter: {
-    card: 'summary_large_image',
-    title: 'PayBoss - Gateway to Simplified Business Payments',
-    description,
-    site: appConfig.creator,
-    creator: appConfig.creator,
+    card: 'summary_large_image', // 📏 Uses large image format
+    title: 'Your App Name - Modern Web Application', // 📝 Update Twitter title
+    description, // Uses description from above
+    site: appConfig.creator, // 🔗 Your Twitter handle
+    creator: appConfig.creator, // 👤 Content creator Twitter handle
     images: [
       {
-        url: appConfig.twitterImage,
+        url: appConfig.twitterImage, // 🖼️ Twitter image (same size as OG)
         width: 1200,
         height: 630,
-        alt: 'PayBoss Business Payment Solutions',
+        alt: 'Your App Name Application', // 🏷️ Update alt text
       },
     ],
   },
 
-  // Icons (Next.js 15+ format)
+  // 🎯 ICONS: App icons for different platforms and sizes
   icons: {
     icon: [
       {
-        url: '/web-app-manifest-192x192.png',
+        url: '/favicon-16x16.png', // 📁 Add your 16x16 favicon
         sizes: '16x16',
         type: 'image/png',
       },
       {
-        url: '/web-app-manifest-512x512.png',
-        sizes: '32x32',
+        url: '/favicon-32x32.png', // 📁 Add your 32x32 favicon
+        sizes: '32x32', 
         type: 'image/png',
       },
     ],
-    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
-    shortcut: '/favicon.ico',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }], // 🍎 Apple touch icon
+    shortcut: '/favicon.ico', // 🔗 Traditional favicon
   },
 
-  // Manifest
-  manifest: '/manifest.json',
+  // 📱 PWA: Progressive Web App manifest
+  manifest: '/site.webmanifest', // 📄 Update manifest file name if different
 
-  // App specific
+  // 📱 MOBILE: App-specific configurations
   applicationName: appConfig.name,
   appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: appConfig.name,
+    capable: true, // 📱 Enable standalone mode on iOS
+    statusBarStyle: 'default', // 🎨 Status bar appearance: 'default' | 'black' | 'black-translucent'
+    title: appConfig.name, // 📝 App title when added to home screen
     startupImage: [
       {
-        url: '/apple-icon.png',
+        url: '/apple-splash-screen.png', // 🖼️ Add your iOS splash screen image
         media: '(max-width: 768px)',
       },
     ],
   },
 
-  // Robots
+  // 🤖 SEO: Search engine crawling instructions
   robots: {
-    index: true,
-    follow: true,
-    nocache: false,
+    index: true, // ✅ Allow search engines to index your site
+    follow: true, // ✅ Allow crawlers to follow links
+    nocache: false, // 💾 Allow caching
     googleBot: {
       index: true,
       follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      noimageindex: false, // ✅ Allow Google to index images
+      'max-video-preview': -1, // 📹 No limit on video preview length
+      'max-image-preview': 'large', // 🖼️ Allow large image previews
+      'max-snippet': -1, // 📝 No limit on text snippet length
     },
   },
 
-  // Verification
+  // 🔐 VERIFICATION: Search console and webmaster tools
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
+    google: 'your-google-search-console-code', // 🔍 Add Google Search Console verification
+    yandex: 'your-yandex-webmaster-code', // 🌐 Add Yandex verification (optional)
     other: {
-      'facebook-domain-verification': 'your-facebook-verification-code',
+      'facebook-domain-verification': 'your-facebook-verification-code', // 📘 Facebook domain verification
+      // 'msvalidate.01': 'your-bing-verification-code', // 🔍 Bing webmaster tools
     },
   },
 
-  // Canonical
+  // 🔗 CANONICAL: Prevent duplicate content issues
   alternates: {
-    canonical: appConfig.url,
+    canonical: appConfig.url, // 📍 Primary URL for this page
     languages: {
-      'en-US': appConfig.url,
-      'en-GB': `${appConfig.url}/en-gb`,
+      'en-US': appConfig.url, // 🇺🇸 English (US) version
+      // Add more language versions as needed:
+      // 'es-ES': `${appConfig.url}/es`,
+      // 'fr-FR': `${appConfig.url}/fr`,
     },
   },
 
-  // Additional meta
-  category: 'finance',
-  classification: 'Business',
-  referrer: 'origin-when-cross-origin',
+  // 📊 CATEGORIZATION: Help search engines understand your content
+  category: 'technology', // 🏷️ Update with your app's category
+  classification: 'Business', // 🏢 Content classification
+  referrer: 'origin-when-cross-origin', // 🔒 Privacy setting for referrer headers
 };
 
-// Structured data as a separate function for better organization
+// 📋 STRUCTURED DATA: Rich snippets for better search results
+// 🎯 CUSTOMIZE: Update this JSON-LD schema for your application
 export function generateStructuredData() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
+    '@type': 'WebApplication', // 💻 Application type - can be 'Website', 'SoftwareApplication', etc.
     name: appConfig.name,
     url: appConfig.url,
-    logo: `${appConfig.url}/images/payboss-logo-light.png`,
+    logo: `${appConfig.url}/logo.png`, // 🖼️ Add your logo image
     description,
-    operatingSystem: 'Web Browser',
-    applicationCategory: 'FinanceApplication',
-    browserRequirements: 'Requires JavaScript. Requires HTML5.',
-    permissions: 'No special permissions required',
+    operatingSystem: 'Web Browser', // 🌐 Platform compatibility
+    applicationCategory: 'BusinessApplication', // 🏢 Update category: 'BusinessApplication', 'LifestyleApplication', etc.
+    browserRequirements: 'Requires JavaScript. Requires HTML5.', // ⚙️ Technical requirements
+    permissions: 'No special permissions required', // 🔐 Privacy information
     offers: {
+      // 💰 PRICING: Update if your app has pricing
       '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'ZMW',
-      description: 'Free business payment management tools',
+      price: '0', // 💵 Set your price or '0' for free
+      priceCurrency: 'USD', // 💱 Currency code
+      description: 'Free modern web application', // 📝 Pricing description
     },
     creator: {
-      '@type': 'Organization',
-      name: 'Bridging Gap Solutions',
-      url: 'https://bgsgroup.co.zm',
-      logo: `${appConfig.url}/images/payboss-logo-light.png`,
+      // 👤 CREATOR: Update with your information
+      '@type': 'Organization', // Can be 'Person' or 'Organization'
+      name: 'Your Company Name', // 🏢 Your company or name
+      url: 'https://yourcompany.com', // 🌐 Your company website
+      logo: `${appConfig.url}/company-logo.png`, // 🖼️ Company logo
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+260 211 255 910',
-        email: 'fintech@bgsgroup.co.zm',
-        contactType: 'Customer Service',
-        availableLanguage: ['English'],
+        telephone: '+1-555-123-4567', // 📞 Support phone (optional)
+        email: 'support@yourapp.com', // 📧 Support email
+        contactType: 'Customer Service', // 🎧 Contact type
+        availableLanguage: ['English'], // 🌍 Supported languages
       },
     },
     sameAs: [
-      'https://twitter.com/BGS-PayBoss',
-      'https://www.linkedin.com/company/BGS-PayBoss',
-      'https://www.facebook.com/BGS-PayBoss',
+      // 🔗 SOCIAL LINKS: Add your social media profiles
+      'https://twitter.com/yourusername',
+      'https://www.linkedin.com/company/yourcompany',
+      'https://www.facebook.com/yourcompany',
+      // 'https://github.com/yourusername',
+      // 'https://instagram.com/yourusername',
     ],
     featureList: [
-      'Invoice Management',
-      'Payment Processing',
-      'Financial Reporting',
-      'Expense Tracking',
-      'Digital Receipts',
+      // ✨ FEATURES: List your app's key features
+      'Modern UI Design',
+      'Responsive Layout',
+      'TypeScript Support',
+      'Dark Mode Support',
+      'Fast Performance',
+      // Add your specific features here
     ],
-    screenshot: `${appConfig.url}/images/screenshots/dashboard.png`,
+    screenshot: `${appConfig.url}/app-screenshot.png`, // 📸 App screenshot for rich snippets
   };
 }
 
@@ -293,7 +346,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         )}
         suppressHydrationWarning
       >
-        {/* Structured Data */}
+        {/* 📊 STRUCTURED DATA: JSON-LD for rich snippets */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -301,17 +354,22 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           }}
         />
 
-        {/* Preconnect to external domains for performance */}
-        {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        /> */}
+        {/* ⚡ PERFORMANCE: Preconnect to external domains */}
+        {/* 🔗 CUSTOMIZE: Add preconnect links for external services you use */}
+        {/* 
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://api.yourservice.com" />
+        */}
 
-        {/* DNS prefetch for better performance */}
+        {/* 🚀 DNS PREFETCH: Improve loading speed for external resources */}
+        {/* 🔗 CUSTOMIZE: Add DNS prefetch for services you use */}
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        {/* 
+        <link rel="dns-prefetch" href="//api.yourdomain.com" />
+        <link rel="dns-prefetch" href="//cdn.yourservice.com" />
+        */}
 
         <Providers session={session}>{children}</Providers>
       </body>

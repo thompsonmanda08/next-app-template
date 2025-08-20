@@ -6,7 +6,7 @@ import AuthLayout from '../../(auth)/layout';
 async function Support() {
   return (
     <AuthLayout>
-      <div className="-mt-[496px] flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
+      <div className="flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
         <Logo className="text-white scale-[1.5] mb-4" />
         <h2
           className={
