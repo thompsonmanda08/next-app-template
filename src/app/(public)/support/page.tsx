@@ -1,12 +1,12 @@
-import Logo from '@/components/base/payboss-logo';
+import Logo from '@/components/base/logo';
 import WorkspaceHeader from '@/components/elements/welcome-header';
 import SupportForm from '@/components/forms/support-form';
 
 import AuthLayout from '../../(auth)/layout';
-import { getUserDetails } from '../../_actions/config-actions';
+import { getAuthSession } from '../../_actions/config-actions';
 
 async function Support() {
-  const [session] = await Promise.all([getUserDetails()]);
+  const session = await getAuthSession();
 
   return (
     <AuthLayout>
@@ -18,10 +18,7 @@ async function Support() {
       )}
       <div className="-mt-[496px] flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
         <Logo
-          isWhite
-          classNames={{
-            wrapper: 'scale-[1.5] mb-4',
-          }}
+          className="text-white scale-[1.5] mb-4"
         />
         <h2
           className={

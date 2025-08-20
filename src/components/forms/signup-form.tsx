@@ -3,11 +3,10 @@ import { Card, addToast } from '@heroui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 
-import {
-  createMerchantAdminUser,
-  createNewMerchant,
-  submitMerchantBankDetails,
-} from '@/app/_actions/auth-actions';
+// Actions removed - template stub functions
+const createMerchantAdminUser = async (data: any) => ({ success: true });
+const createNewMerchant = async (data: any) => ({ success: true });
+const submitMerchantBankDetails = async (data: any) => ({ success: true });
 import useAuthStore from '@/context/auth-store';
 import useCustomTabsHook from '@/hooks/use-custom-tabs';
 import { containerVariants } from '@/lib/constants';
@@ -15,11 +14,12 @@ import { containerVariants } from '@/lib/constants';
 import StatusMessage from '../base/status-message';
 import { Button } from '../ui/button';
 
-import Step0 from './signup-fragments/step-0';
-import Step1 from './signup-fragments/step-1';
-import Step1_TPIN from './signup-fragments/step-1-1';
-import Step2 from './signup-fragments/step-2';
-import Step3 from './signup-fragments/step-3';
+// Step components removed for template - implement as needed
+const Step0 = () => <div>Step 0 - Business Registration</div>;
+const Step1 = () => <div>Step 1 - Basic Info</div>;
+const Step1_TPIN = () => <div>Step 1.1 - TPIN</div>;
+const Step2 = () => <div>Step 2 - Details</div>;
+const Step3 = () => <div>Step 3 - Verification</div>;
 
 export const STEPS = [
   'business-registration',

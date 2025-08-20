@@ -21,7 +21,7 @@ import {
 import { useParams, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-import Logo from '@/components/base/payboss-logo';
+import Logo from '@/components/base/logo';
 import SoftBoxIcon from '@/components/base/soft-box-icon';
 import { Button } from '@/components/ui/button';
 import Spinner from '@/components/ui/custom-spinner';
@@ -356,7 +356,7 @@ function SideNavBar() {
         className="absolute left-6 top-3 z-[99] h-8 min-w-5 bg-transparent p-2 hover:bg-primary/5 lg:hidden"
       >
         <Bars3BottomLeftIcon className="h-7 w-7 text-foreground/70" />
-        <Logo href={'#'} />
+        <Logo />
       </Button>
       <div
         className={cn('h-full hidden w-[380px] lg:flex', {
@@ -368,7 +368,7 @@ function SideNavBar() {
             `h-full w-full flex-col bg-card p-5 transition-all duration-500 ease-in-out`,
           )}
         >
-          <Logo href={dashboardRoute} />
+          <Logo />
           <div className="relative py-2">
             <DropdownButton
               backdropBlur={true}

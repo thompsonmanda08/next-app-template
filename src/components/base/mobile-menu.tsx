@@ -2,7 +2,7 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 
-import Logo from '@/components/base/payboss-logo';
+import Logo from '@/components/base/logo';
 import { cn } from '@/lib/utils';
 
 import SideNavItems from './side-nav-items';

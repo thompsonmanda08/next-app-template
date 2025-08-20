@@ -4,14 +4,12 @@ import { PropsWithChildren } from 'react';
 import SideNavBar from '@/components/elements/side-navbar';
 import TopNavBar from '@/components/elements/top-bar';
 
-import { getAuthSession, getUserDetails } from '../_actions/config-actions';
+import { getAuthSession } from '../_actions/config-actions';
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
-  const authSession = await getAuthSession();
+  const session = await getAuthSession();
 
-  if (!authSession?.accessToken) redirect('/login');
-
-  const [session] = await Promise.all([getUserDetails()]);
+  if (!session?.accessToken) redirect('/login');
 
   return (
     <main className="flex h-screen items-start justify-start overflow-hidden bg-background text-foreground">

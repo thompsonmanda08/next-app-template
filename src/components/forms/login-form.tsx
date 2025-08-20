@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 
-import { authenticateUser } from '@/app/_actions/auth-actions';
+// Action removed - using loginUser from auth-actions
+import { loginUser } from '@/app/_actions/auth-actions';
 import { Input } from '@/components/ui/input-field';
 import useAuthStore from '@/context/auth-store';
 import { LoginPayload } from '@/types/account';
@@ -44,7 +45,7 @@ function LoginForm() {
       return;
     }
 
-    const response = await authenticateUser(loginDetails);
+    const response = await loginUser(loginDetails);
 
     if (response?.success) {
       window.location.href = '/workspaces';

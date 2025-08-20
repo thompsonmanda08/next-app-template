@@ -3,13 +3,13 @@ import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import Logo from '@/components/base/payboss-logo';
-import EmptyState from '@/components/elements/empty-state';
+import Logo from '@/components/base/logo';
+import EmptyState from '@/components/base/empty-state';
 import SignUpForm from '@/components/forms/signup-form';
 import { Button } from '@/components/ui/button';
 import Spinner from '@/components/ui/custom-spinner';
 import useAuthStore from '@/context/auth-store';
-import useConfigOptions from '@/hooks/use-config-options';
+import { useConfigOptions } from '@/hooks/use-config-options';
 
 export default function Register({
   superMerchantID,
@@ -24,7 +24,7 @@ export default function Register({
     <div className="relative -mt-[260px] md:-mt-[412px] xl:-mt-[432px] flex min-w-0 flex-col break-words rounded-2xl border-0 bg-transparent bg-clip-border shadow-none ">
       {!isAccountCreated && (
         <div className="pt bg-red-5000 z-10 -mt-16 flex flex-col items-center rounded-t-2xl border-b-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-black/40 via-black/5 to-transparent p-6 pb-10 pt-24">
-          <Logo isWhite classNames={{ wrapper: 'scale-[1.5] mb-4' }} />
+          <Logo className="text-white scale-[1.5] mb-4" />
           <h2
             className={
               'w-full text-center text-[clamp(18px,18px+1vw,48px)] font-bold text-transparent text-white'
@@ -77,7 +77,7 @@ export function AccountCreatedSuccess() {
   return (
     <Card className="m-auto mt-24 flex max-w-[600px] flex-col items-center justify-center lg:mt-40">
       <CardHeader className="items-center justify-center">
-        <Logo href={'#'} />
+        <Logo />
       </CardHeader>
       <CardBody>
         <h2

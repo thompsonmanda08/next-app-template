@@ -19,3 +19,11 @@ export type User = {
   username: string;
   [x: string]: string;
 };
+
+// Additional types for template
+export interface AccountOwner {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}

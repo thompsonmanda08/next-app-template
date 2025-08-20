@@ -86,3 +86,35 @@ export async function getRefreshToken(): Promise<APIResponse> {
     return handleError(error, 'POST | REFRESH TOKEN', url);
   }
 }
+
+/**
+ * Handles user idle screen lock functionality
+ * This is a stub implementation for the template
+ */
+export async function lockScreenOnUserIdle(): Promise<APIResponse> {
+  try {
+    // Implement screen lock logic here
+    // For template purposes, this is a stub
+    return successResponse(null, 'Screen lock initiated');
+  } catch (error: Error | any) {
+    return handleError(error, 'POST | LOCK SCREEN', 'screen-lock');
+  }
+}
+
+/**
+ * Validates TPIN (Transaction PIN)
+ * This is a stub implementation for the template
+ */
+export async function validateTPIN(tpin: string): Promise<APIResponse> {
+  try {
+    // Implement TPIN validation logic here
+    // For template purposes, this is a stub
+    const isValid = tpin && tpin.length >= 4;
+    return successResponse(
+      { valid: isValid }, 
+      isValid ? 'TPIN is valid' : 'Invalid TPIN'
+    );
+  } catch (error: Error | any) {
+    return handleError(error, 'POST | VALIDATE TPIN', 'validate-tpin');
+  }
+}

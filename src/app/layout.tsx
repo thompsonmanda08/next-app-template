@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { getAuthSession, getUserDetails } from './_actions/config-actions';
+import { getAuthSession } from './_actions/config-actions';
 import Providers from './providers';
 
 const inter = localFont({
@@ -276,8 +276,7 @@ export function generateStructuredData() {
 }
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const session = await getUserDetails();
-  const authSession = await getAuthSession();
+  const session = await getAuthSession();
 
   const structuredData = generateStructuredData();
 
@@ -315,7 +314,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-        <Providers authSession={authSession} session={session}>
+        <Providers session={session}>
           {children}
         </Providers>
       </body>

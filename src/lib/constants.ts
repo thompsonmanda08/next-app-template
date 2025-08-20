@@ -56,8 +56,11 @@ export const rowsPerPageOptions = [
 // QUERY KEYS
 export const QUERY_KEYS = {
   configs: 'configs',
-
-
+  WORKSPACE_MEMBERS: 'workspace_members',
+  users: 'users',
+  transactions: 'transactions',
+  WORKSPACES: 'workspaces',
+  SETUP: 'setup'
 };
 
 
@@ -70,3 +73,53 @@ export const ZAMTEL_NO = /^(?:\+?26|26)?0(95|75)\d{7}$/;
 
 export const PASSWORD_PATTERN =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+// Animation variants for Framer Motion
+export const slideDownInView = {
+  initial: { y: -20, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  exit: { y: -20, opacity: 0 },
+  transition: { duration: 0.3 }
+};
+
+export const staggerContainerItemVariants = {
+  initial: { y: 20, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  exit: { y: 20, opacity: 0 }
+};
+
+// Workspace types
+export const WORKSPACE_TYPES = {
+  PERSONAL: 'personal',
+  BUSINESS: 'business',
+  ENTERPRISE: 'enterprise'
+};
+
+// Color mappings for UI components
+export const SERVICE_PROVIDER_COLOR_MAP = {
+  MTN: 'yellow',
+  AIRTEL: 'red', 
+  ZAMTEL: 'green',
+  VISA: 'blue',
+  MASTERCARD: 'orange',
+  DEFAULT: 'gray'
+};
+
+export const TRANSACTION_STATUS_COLOR_MAP = {
+  pending: 'warning',
+  completed: 'success',
+  failed: 'danger',
+  cancelled: 'default',
+  processing: 'primary'
+};
+
+// Additional animation variants
+export const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};

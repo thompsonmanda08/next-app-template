@@ -1,13 +1,12 @@
 import { addToast } from '@heroui/react';
 import { create } from 'zustand';
 
-import {
-  adminResetUserPassword,
-  assignUsersToWorkspace,
-  deleteSystemUserData,
-  unlockSystemUser,
-} from '@/app/_actions/user-actions';
-import { deleteUserFromWorkspace } from '@/app/_actions/workspace-actions';
+// Actions removed - template stub functions
+const adminResetUserPassword = async (data: any) => ({ success: true });
+const assignUsersToWorkspace = async (data: any) => ({ success: true });
+const deleteSystemUserData = async (id: string) => ({ success: true });
+const unlockSystemUser = async (id: string) => ({ success: true });
+const deleteUserFromWorkspace = async (workspaceId: string, userId: string) => ({ success: true });
 import { generateRandomString } from '@/lib/utils';
 import { WorkspaceStore } from '@/types/stores';
 

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 import { Button } from '../ui/button';
 
-import Logo from './payboss-logo';
+import Logo from './logo';
 
 export function ErrorCard({
   title,
@@ -44,11 +44,7 @@ export function ErrorCard({
       )}
     >
       <CardHeader>
-        <Logo
-          className="mx-auto"
-          classNames={{ wrapper: 'mx-auto' }}
-          href="/"
-        />
+        <Logo className="mx-auto" />
       </CardHeader>
       <CardBody className="flex cursor-pointer select-none flex-col items-center justify-center p-0">
         <p

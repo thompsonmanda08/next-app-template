@@ -3,7 +3,10 @@ import { clsx } from 'clsx';
 import { ClassValue } from 'clsx/clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { ActivityLogGroup } from '@/app/dashboard/[workspaceID]/workspace-settings/components/wallet-transaction-log';
+// Generic type for activity log groups
+interface ActivityLogGroup {
+  data?: any[];
+}
 
 import { AIRTEL_NO, BASE_URL, MTN_NO, ZAMTEL_NO } from './constants';
 
