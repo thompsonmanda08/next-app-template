@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getServerSession } from './lib/session';
+import { verifySession } from './lib/session';
 
 const PUBLIC_ROUTES = ['/', '/login', '/register', '/support', '/docs'];
 
@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const url = request.nextUrl.clone(); // REQUIRED FOR BASE ABSOLUTE URL
   const response = NextResponse.next();
-  const session = await getServerSession();
+  const session = await verifySession();
 
   const urlRouteParams = pathname.match(/^\/dashboard\/([^\/]+)\/?$/);
   const accessToken = session?.accessToken || '';

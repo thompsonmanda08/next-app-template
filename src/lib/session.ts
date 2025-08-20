@@ -1,11 +1,9 @@
 import 'server-only';
 
-import { SignJWT, jwtVerify } from 'jose';
+import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
-import { AuthSession, UserSession, Workspace, WorkspaceSession } from '@/types';
-
-import { AUTH_SESSION, USER_SESSION, WORKSPACE_SESSION } from './constants';
+import { AUTH_SESSION } from './constants';
 
 // 1. Get secret from environment variables (MUST be set)
 const secretKey =
@@ -147,7 +145,7 @@ export async function updateAuthSession(fields: any): Promise<void> {
   }
 }
 
-export async function verifySession(): Promise<SessionPayload | null> {
+export async function verifySession(): Promise<JWTPayload | null> {
   const cookie = (await cookies()).get(AUTH_SESSION)?.value;
   const session = await decrypt(cookie);
 
@@ -162,8 +160,6 @@ export async function deleteSession() {
   // const allCookies = cookieStore.getAll();
 
   cookieStore.delete(AUTH_SESSION);
-  cookieStore.delete(USER_SESSION);
-  cookieStore.delete(WORKSPACE_SESSION);
 
   if (typeof window !== 'undefined') {
     localStorage.clear();

@@ -6,22 +6,16 @@ import { motion } from 'framer-motion';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import FirstLogin from '@/components/elements/first-login';
-import ScreenLock, {
-  IdleTimerContainer,
-} from '@/components/elements/screen-lock';
 import { useNetwork } from '@/hooks/use-network';
-import { AuthSession, UserSession } from '@/types';
+import { AuthSession } from '@/types';
 
 const queryClient = new QueryClient();
 
 function Providers({
   session,
-  authSession,
   children,
 }: PropsWithChildren & {
-  session?: UserSession;
-  authSession?: AuthSession;
+  session?: AuthSession;
 }) {
   const { online } = useNetwork();
   const [mounted, setMounted] = useState(false);
@@ -58,12 +52,7 @@ function Providers({
               NETWORK ERROR: Check your internet connection and try again!
             </motion.div>
           )}
-          <IdleTimerContainer authSession={authSession} />
           {children}
-          {session?.user?.changePassword && <FirstLogin />}
-          {authSession?.screenLocked && (
-            <ScreenLock open={authSession?.screenLocked} />
-          )}
 
           <ToastProvider placement={'top-right'} toastOffset={8} />
         </HeroUIProvider>
