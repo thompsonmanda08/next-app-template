@@ -45,13 +45,13 @@ function LoginForm() {
   const validateFields = (data: LoginPayload): Record<string, string> => {
     const errors: Record<string, string> = {};
 
-    if (!data.email?.trim()) {
+    if (!data.email || !data.email.trim()) {
       errors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
       errors.email = 'Please enter a valid email address';
     }
 
-    if (!data.password?.trim()) {
+    if (!data.password || !data.password.trim()) {
       errors.password = 'Password is required';
     }
 
@@ -170,13 +170,13 @@ function LoginForm() {
             formData.password.length > 0 && (
               <button
                 type="button"
-                className="absolute cursor-pointer right-3 top-[55%] transform -translate-y-1/2 text-gray-400"
+                className="cursor-pointer text-gray-400 hover:text-gray-600"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <EyeOffIcon className="w-5 h-5 md:w-6 xl:h-6" />
+                  <EyeOffIcon className="w-5 h-5" />
                 ) : (
-                  <EyeIcon className="w-5 h-5 md:w-6 xl:h-6" />
+                  <EyeIcon className="w-5 h-5" />
                 )}
               </button>
             )

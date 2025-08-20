@@ -3,7 +3,7 @@
 
 import {
   CheckCircle,
-  CloudArrowUp,
+  CloudUpload,
   FileUp,
   X,
 } from 'lucide-react';
@@ -311,7 +311,7 @@ export const SingleFileDropzone = React.forwardRef<any, DropZoneProps>(
                   'flex-row gap-2 font-medium': isLandscape,
                 })}
               >
-                <CloudArrowUp
+                <CloudUpload
                   className={cn('mb-2 h-12 w-12', { 'm-0 w-8': isLandscape })}
                 />
                 <div className="text-gray-400">

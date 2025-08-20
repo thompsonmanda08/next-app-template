@@ -14,11 +14,14 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
     errorText?: string;
     isDisabled?: boolean;
     isInvalid?: boolean;
+    endContent?: React.ReactNode;
+    description?: string;
     classNames?: {
       wrapper?: string;
       input?: string;
       label?: string;
       errorText?: string;
+      base?: string;
     };
   };
 
@@ -41,6 +44,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       labelPlacement = 'outside',
       isDisabled,
       errorText = '',
+      endContent,
+      description,
       ...props
     },
     ref,
@@ -85,6 +90,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         isInvalid={isInvalid}
         errorMessage={errorText && isInvalid ? errorText : undefined}
         isRequired={props?.required}
+        description={description}
+        endContent={endContent}
         className={cn(className, classNames?.wrapper)}
         classNames={{
           mainWrapper: cn('', classNames?.wrapper),

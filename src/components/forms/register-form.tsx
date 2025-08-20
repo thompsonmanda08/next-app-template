@@ -49,26 +49,26 @@ export default function SignUpForm() {
 
     if (step === 'step1') {
       // Step 1 validation
-      if (!data.firstName?.trim()) {
+      if (!data.firstName || !data.firstName.trim()) {
         errors.firstName = 'First name is required';
       }
-      if (!data.lastName?.trim()) {
+      if (!data.lastName || !data.lastName.trim()) {
         errors.lastName = 'Last name is required';
       }
-      if (!data.email?.trim()) {
+      if (!data.email || !data.email.trim()) {
         errors.email = 'Email is required';
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
         errors.email = 'Please enter a valid email address';
       }
     }
 
     if (step === 'step2') {
       // Step 2 validation
-      if (!data.password?.trim()) {
+      if (!data.password || !data.password.trim()) {
         errors.password = 'Password is required';
-      } else if (data.password.length < 8) {
+      } else if (data.password.trim().length < 8) {
         errors.password = 'Password must be at least 8 characters long';
-      } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(data.password)) {
+      } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(data.password.trim())) {
         errors.password =
           'Password must contain at least one uppercase letter, one lowercase letter, and one number';
       }
@@ -226,15 +226,15 @@ function Step1({
   const validateFields = (data: Partial<User>): Record<string, string> => {
     const errors: Record<string, string> = {};
 
-    if (!data.firstName?.trim()) {
+    if (!data.firstName || !data.firstName.trim()) {
       errors.firstName = 'First name is required';
     }
-    if (!data.lastName?.trim()) {
+    if (!data.lastName || !data.lastName.trim()) {
       errors.lastName = 'Last name is required';
     }
-    if (!data.email?.trim()) {
+    if (!data.email || !data.email.trim()) {
       errors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
       errors.email = 'Please enter a valid email address';
     }
 
@@ -388,7 +388,7 @@ function Step2({
           formData?.password.length > 0 && (
             <button
               type="button"
-              className="absolute cursor-pointer right-3 top-[55%] transform -translate-y-1/2 text-gray-400"
+              className="cursor-pointer text-gray-400 hover:text-gray-600"
               onClick={() =>
                 setShowPassword((prev) => ({
                   ...prev,
@@ -397,9 +397,9 @@ function Step2({
               }
             >
               {showPassword.password ? (
-                <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
+                <EyeOffIcon className="w-5 h-5" />
               ) : (
-                <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
+                <EyeIcon className="w-5 h-5" />
               )}
             </button>
           )
@@ -438,7 +438,7 @@ function Step2({
           confirmPassword.length > 0 && (
             <button
               type="button"
-              className="absolute cursor-pointer right-3 top-[70%] transform -translate-y-1/2 text-gray-400"
+              className="cursor-pointer text-gray-400 hover:text-gray-600"
               onClick={() =>
                 setShowPassword((prev) => ({
                   ...prev,
@@ -447,9 +447,9 @@ function Step2({
               }
             >
               {showPassword.confirmPassword ? (
-                <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
+                <EyeOffIcon className="w-5 h-5" />
               ) : (
-                <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
+                <EyeIcon className="w-5 h-5" />
               )}
             </button>
           )

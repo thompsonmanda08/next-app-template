@@ -7,7 +7,7 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import { useNetwork } from '@/hooks/use-network';
-import { AuthSession } from '@/types';
+import { Session } from '@/types';
 
 const queryClient = new QueryClient();
 
@@ -15,7 +15,7 @@ function Providers({
   session,
   children,
 }: PropsWithChildren & {
-  session?: AuthSession;
+  session?: Session | null;
 }) {
   const { online } = useNetwork();
   const [mounted, setMounted] = useState(false);

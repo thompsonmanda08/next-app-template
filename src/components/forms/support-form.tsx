@@ -2,9 +2,8 @@
 import { addToast } from '@heroui/react';
 import { useState } from 'react';
 
-import Card from '../base/custom-card';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input-field';
+import { Input } from '../ui/hero-input';
 
 function SupportForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +45,7 @@ function SupportForm() {
   return (
     <>
       {' '}
-      <Card className=" mx-auto max-w-lg">
+      <div className="mx-auto max-w-lg p-6 bg-white rounded-lg shadow-sm border">
         {/* <div className="mb-4 flex w-full flex-col justify-between md:flex-row md:items-center">
           <CardHeader
             title={'PayBoss Support'}
@@ -117,7 +116,7 @@ function SupportForm() {
             Send
           </Button>
         </form>
-      </Card>
+      </div>
     </>
   );
 }

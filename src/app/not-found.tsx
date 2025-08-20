@@ -197,11 +197,7 @@ export default function ErrorPage() {
               </p>
             </div>
 
-            <Footer
-              classNames={{ wrapper: 'w-full' }}
-              showLinks={false}
-              showLogo={false}
-            />
+            <Footer />
           </div>
           {/* End Main Error Content */}
         </div>

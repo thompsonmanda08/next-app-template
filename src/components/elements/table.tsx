@@ -17,13 +17,19 @@ import EmptyLogs from '@/components/base/empty-logs';
 import { Button } from '@/components/ui/button';
 import Loader from '@/components/ui/loader';
 import SelectField from '@/components/ui/select-field';
-import usePaymentsStore from '@/context/payment-store';
+// import usePaymentsStore from '@/context/payment-store'; // TODO: Implement payment store
 import { useDebounce } from '@/hooks/use-debounce';
-import {
-  SERVICE_PROVIDER_COLOR_MAP,
-  TRANSACTION_STATUS_COLOR_MAP,
-} from '@/lib/constants';
-import { Columns, ColumnType } from '@/lib/table-columns';
+// TODO: Add these color maps to constants
+// import {
+//   SERVICE_PROVIDER_COLOR_MAP,
+//   TRANSACTION_STATUS_COLOR_MAP,
+// } from '@/lib/constants';
+const SERVICE_PROVIDER_COLOR_MAP = {}; // Placeholder
+const TRANSACTION_STATUS_COLOR_MAP = {}; // Placeholder
+// TODO: Create table-columns types
+// import { Columns, ColumnType } from '@/lib/table-columns';
+type Columns = any; // Placeholder
+type ColumnType = any; // Placeholder
 import { cn } from '@/lib/utils';
 
 import { SingleSelectionDropdown } from '../ui/dropdown-button';
@@ -107,7 +113,10 @@ export default function CustomTable({
     },
   },
 }: CustomTableProps) {
-  const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
+  // TODO: Implement payment store functionality
+  // const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
+  const setSelectedBatch = () => {}; // Placeholder
+  const setOpenBatchDetailsModal = () => {}; // Placeholder
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
   const [page, setPage] = React.useState(1);
 

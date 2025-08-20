@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 import Spinner from '../ui/custom-spinner';
 
-import EmptyLogs from './empty-logs';
+import EmptyLogs from '../base/empty-logs';
 
 const IframeWithFallback = ({
   title,

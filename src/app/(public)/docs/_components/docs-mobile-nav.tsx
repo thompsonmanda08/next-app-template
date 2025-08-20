@@ -12,7 +12,7 @@ export default function DocsMobileNav({ isOpen = false, onToggle }: DocsMobileNa
   return (
     <div className="md:hidden">
       <Button
-        variant="outline"
+        variant="bordered"
         size="sm"
         onClick={onToggle}
         className="p-2"
