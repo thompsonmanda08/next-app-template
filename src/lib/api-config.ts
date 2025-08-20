@@ -1,8 +1,12 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+} from 'axios';
 
-import { getAuthSession } from '@/app/_actions/config-actions';
 import { APIResponse } from '@/types';
 import { BASE_URL } from './constants';
+import { verifySession } from './session';
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -74,7 +78,7 @@ export type RequestType = AxiosRequestConfig & {
 };
 
 const authenticatedApiClient = async (request: RequestType) => {
-  const session = await getAuthSession();
+  const session = await verifySession();
 
   const config = {
     method: 'GET',

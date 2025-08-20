@@ -4,9 +4,8 @@ import localFont from 'next/font/local';
 import { PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/utils';
-
-import { getAuthSession } from './_actions/config-actions';
 import Providers from './providers';
+import { verifySession } from '@/lib/session';
 
 const inter = localFont({
   src: [
@@ -276,7 +275,7 @@ export function generateStructuredData() {
 }
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const session = await getAuthSession();
+  const session = await verifySession();
 
   const structuredData = generateStructuredData();
 
@@ -314,9 +313,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-        <Providers session={session}>
-          {children}
-        </Providers>
+        <Providers session={session}>{children}</Providers>
       </body>
     </html>
   );

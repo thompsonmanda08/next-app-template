@@ -20,7 +20,7 @@ export default function RegisterPage() {
   // Check for success message from signup
   useEffect(() => {
     const success = searchParams.get('success');
-    if (success === 'account-created') {
+    if (success === 'true') {
       // SET A MESSAGE HERE
     }
   }, [searchParams]);

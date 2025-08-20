@@ -4,44 +4,56 @@ import { PropsWithChildren } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { CircleAlertIcon } from 'lucide-react';
 
 function EmptyState({
+  Icon = CircleAlertIcon,
   title,
-  message,
+  description,
+  className,
+  classNames,
   href,
   buttonText,
   onButtonClick,
   children,
-  classNames,
 }: PropsWithChildren & {
+  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   title: string;
-  message: string;
+  description: string;
+  className?: string;
+  classNames?: {
+    icon?: string;
+    container?: string;
+    title?: string;
+    description?: string;
+  };
   href?: string;
   buttonText?: string;
   onButtonClick?: () => void;
-  classNames?: {
-    heading?: string | ClassValue[];
-    paragraph?: string | ClassValue[];
-    // [x: string]: string | ClassValue[];
-  };
 }) {
   return (
-    <div className="my-12 flex h-full w-full flex-col items-center justify-center text-gray-300">
-      <h3
+    <div
+      className={cn(
+        'my-12 flex h-full w-full flex-col items-center justify-center text-gray-300',
+        className,
+      )}
+    >
+      <Icon className={cn('w-16 h-16 ', classNames?.icon)} />
+      <h4
         className={cn(
-          `text-center text-2xl font-bold leading-8 text-primary-800 md:text-[48px]`,
-          classNames?.heading,
+          'text-center text-lg leading-6 text-foreground font-semibold',
+          classNames?.title,
         )}
       >
-        {title || 'Whoops-a-daisy!'}
-      </h3>
+        {title}
+      </h4>
       <p
         className={cn(
-          `my-6 mb-4 max-w-[380px] p-2 px-5 text-center text-sm text-gray-400/80 md:max-w-[480px] md:text-base`,
-          classNames?.paragraph,
+          'mb-2 text-center text-xs sm:text-sm text-gary-400',
+          classNames?.description,
         )}
       >
-        {message || 'There is nothing here yet. Please try again later.'}
+        {description}
       </p>
       {children ||
         (!onButtonClick ? (
