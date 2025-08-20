@@ -1,0 +1,26 @@
+{
+  "name": "BGS PayBoss",
+  "short_name": "PayBoss",
+  "description": "Gateway to Simplified Business Payments & Financial Management",
+  "start_url": "/",
+  "lang": "en-GB",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
