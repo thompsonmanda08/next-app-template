@@ -88,9 +88,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         className={cn(className, classNames?.wrapper)}
         classNames={{
           mainWrapper: cn('', classNames?.wrapper),
-          base: cn('text-foreground gap-1', classNames?.base),
+          base: cn('text-foreground gap-0', classNames?.base),
           input: cn('text-foreground', classNames?.input),
-          label: cn('text-foreground text-sm -mb-1', classNames?.label),
+          label: cn('text-foreground text-sm mb-1', classNames?.label),
           errorMessage: cn('text-red-500', classNames?.errorText),
         }}
         // Pass only safe props

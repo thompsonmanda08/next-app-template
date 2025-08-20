@@ -252,7 +252,7 @@ function Step1({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col md:flex-row gap-2">
         <Input
           label="First Name"
           type="text"
@@ -356,105 +356,105 @@ function Step2({
         </div>
       </div>
 
-      <div className="relative">
-        <Input
-          aria-describedby="password-addon"
-          aria-label="Password"
-          label="Password"
-          name="password"
-          placeholder="Create a strong password"
-          type={showPassword.password ? 'text' : 'password'}
-          required
-          value={formData?.password || ''}
-          onChange={(e) => {
-            updateFormData({ password: e.target.value });
-            if (localErrors.password) {
-              setLocalErrors((prev) => ({ ...prev, password: '' }));
-            }
-            // Clear confirm password error if passwords now match
-            if (
-              confirmPassword &&
-              e.target.value === confirmPassword &&
-              localErrors.confirmPassword
-            ) {
-              setLocalErrors((prev) => ({ ...prev, confirmPassword: '' }));
-            }
-          }}
-          isInvalid={!!(localErrors.password || fieldErrors.password)}
-          errorText={localErrors.password || fieldErrors.password}
-          autoComplete="new-password"
-        />
-        <p className="text-xs text-gray-500 mt-1">
-          Must be at least 8 characters long
-        </p>
-        {formData?.password && formData?.password.length > 0 && (
-          <button
-            type="button"
-            className="absolute cursor-pointer right-3 top-[55%] transform -translate-y-1/2 text-gray-400"
-            onClick={() =>
-              setShowPassword((prev) => ({
-                ...prev,
-                password: !showPassword.password,
-              }))
-            }
-          >
-            {showPassword.password ? (
-              <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
-            ) : (
-              <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
-            )}
-          </button>
-        )}
-      </div>
+      <Input
+        aria-describedby="password-addon"
+        aria-label="Password"
+        label="Password"
+        name="password"
+        placeholder="Create a strong password"
+        type={showPassword.password ? 'text' : 'password'}
+        required
+        value={formData?.password || ''}
+        onChange={(e) => {
+          updateFormData({ password: e.target.value });
+          if (localErrors.password) {
+            setLocalErrors((prev) => ({ ...prev, password: '' }));
+          }
+          // Clear confirm password error if passwords now match
+          if (
+            confirmPassword &&
+            e.target.value === confirmPassword &&
+            localErrors.confirmPassword
+          ) {
+            setLocalErrors((prev) => ({ ...prev, confirmPassword: '' }));
+          }
+        }}
+        isInvalid={!!(localErrors.password || fieldErrors.password)}
+        description="Must be at least 8 characters long"
+        errorText={localErrors.password || fieldErrors.password}
+        autoComplete="new-password"
+        endContent={
+          formData?.password &&
+          formData?.password.length > 0 && (
+            <button
+              type="button"
+              className="absolute cursor-pointer right-3 top-[55%] transform -translate-y-1/2 text-gray-400"
+              onClick={() =>
+                setShowPassword((prev) => ({
+                  ...prev,
+                  password: !showPassword.password,
+                }))
+              }
+            >
+              {showPassword.password ? (
+                <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
+              ) : (
+                <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
+              )}
+            </button>
+          )
+        }
+      />
 
-      <div className="relative">
-        <Input
-          label="Confirm Password"
-          type={showPassword.confirmPassword ? 'text' : 'password'}
-          id="confirmPassword"
-          placeholder="Confirm your password"
-          value={confirmPassword}
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            // Clear error when user starts typing
-            if (localErrors.confirmPassword) {
-              setLocalErrors((prev) => ({ ...prev, confirmPassword: '' }));
-            }
-            // Validate on the fly
-            if (
-              formData.password &&
-              e.target.value &&
-              formData.password !== e.target.value
-            ) {
-              setLocalErrors((prev) => ({
-                ...prev,
-                confirmPassword: 'Passwords do not match',
-              }));
-            }
-          }}
-          isInvalid={!!localErrors.confirmPassword}
-          errorText={localErrors.confirmPassword}
-          required
-        />
-        {confirmPassword && confirmPassword.length > 0 && (
-          <button
-            type="button"
-            className="absolute cursor-pointer right-3 top-[70%] transform -translate-y-1/2 text-gray-400"
-            onClick={() =>
-              setShowPassword((prev) => ({
-                ...prev,
-                confirmPassword: !showPassword.confirmPassword,
-              }))
-            }
-          >
-            {showPassword.confirmPassword ? (
-              <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
-            ) : (
-              <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
-            )}
-          </button>
-        )}
-      </div>
+      <Input
+        label="Confirm Password"
+        type={showPassword.confirmPassword ? 'text' : 'password'}
+        id="confirmPassword"
+        placeholder="Confirm your password"
+        value={confirmPassword}
+        onChange={(e) => {
+          setConfirmPassword(e.target.value);
+          // Clear error when user starts typing
+          if (localErrors.confirmPassword) {
+            setLocalErrors((prev) => ({ ...prev, confirmPassword: '' }));
+          }
+          // Validate on the fly
+          if (
+            formData.password &&
+            e.target.value &&
+            formData.password !== e.target.value
+          ) {
+            setLocalErrors((prev) => ({
+              ...prev,
+              confirmPassword: 'Passwords do not match',
+            }));
+          }
+        }}
+        isInvalid={!!localErrors.confirmPassword}
+        errorText={localErrors.confirmPassword}
+        required
+        endContent={
+          confirmPassword &&
+          confirmPassword.length > 0 && (
+            <button
+              type="button"
+              className="absolute cursor-pointer right-3 top-[70%] transform -translate-y-1/2 text-gray-400"
+              onClick={() =>
+                setShowPassword((prev) => ({
+                  ...prev,
+                  confirmPassword: !showPassword.confirmPassword,
+                }))
+              }
+            >
+              {showPassword.confirmPassword ? (
+                <EyeOffIcon className="w-6 h-6 md:w-7 md:h-7" />
+              ) : (
+                <EyeIcon className="w-6 h-6 md:w-7 md:h-7" />
+              )}
+            </button>
+          )
+        }
+      />
 
       <div className="flex gap-4">
         <Button

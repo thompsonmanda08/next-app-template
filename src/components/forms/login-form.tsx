@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 import { Input } from '../ui/hero-input';
 import { LoginPayload } from '@/types/account';
@@ -21,6 +22,7 @@ function LoginForm() {
   const [error, setError] = useState<ErrorState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const updateFormData = (data: Partial<LoginPayload>) => {
     setFormData((prev) => ({
@@ -155,7 +157,7 @@ function LoginForm() {
           label="Password"
           name="password"
           placeholder="Enter Password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           value={formData.password}
           onChange={(e) => {
             updateFormData({ password: e.target.value });
@@ -163,6 +165,22 @@ function LoginForm() {
           isInvalid={!!fieldErrors.password}
           errorText={fieldErrors.password}
           required
+          endContent={
+            formData.password &&
+            formData.password.length > 0 && (
+              <button
+                type="button"
+                className="absolute cursor-pointer right-3 top-[55%] transform -translate-y-1/2 text-gray-400"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOffIcon className="w-5 h-5 md:w-6 xl:h-6" />
+                ) : (
+                  <EyeIcon className="w-5 h-5 md:w-6 xl:h-6" />
+                )}
+              </button>
+            )
+          }
         />
 
         <Button
