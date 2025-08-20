@@ -46,18 +46,7 @@ function SupportForm() {
     <>
       {' '}
       <div className="mx-auto max-w-lg p-6 bg-white rounded-lg shadow-sm border">
-        {/* <div className="mb-4 flex w-full flex-col justify-between md:flex-row md:items-center">
-          <CardHeader
-            title={'PayBoss Support'}
-            infoText={
-              "We're here to assist you! Our team is dedicated to providing prompt and excellent customer support. Your satisfaction is our priority."
-            }
-            classNames={{
-              titleClasses: 'xl:text-2xl lg:text-xl font-bold',
-              infoClasses: 'text-[15px] xl:text-base',
-            }}
-          />
-        </div> */}
+      
 
         <form
           className="mx-auto flex w-full max-w-md flex-col gap-4"
