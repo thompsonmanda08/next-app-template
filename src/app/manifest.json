@@ -1,11 +1,6 @@
 {
-  "name": "BGS PayBoss",
-  "short_name": "PayBoss",
-  "description": "Gateway to Simplified Business Payments & Financial Management",
-  "start_url": "/",
-  "lang": "en-GB",
-  "orientation": "portrait-primary",
-  "scope": "/",
+  "name": "WebbX",
+  "short_name": "WebbX",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

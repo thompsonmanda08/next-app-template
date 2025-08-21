@@ -13,7 +13,7 @@ import {
 import { format } from 'date-fns';
 import React, { Key } from 'react';
 
-import EmptyLogs from '@/components/base/empty-logs';
+import EmptyState from '@/components/base/empty-state';
 import { Button } from '@/components/ui/button';
 import Loader from '@/components/ui/loader';
 import SelectField from '@/components/ui/select-field';
@@ -115,8 +115,8 @@ export default function CustomTable({
 }: CustomTableProps) {
   // TODO: Implement payment store functionality
   // const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
-  const setSelectedBatch = () => {}; // Placeholder
-  const setOpenBatchDetailsModal = () => {}; // Placeholder
+  const setSelectedBatch = (row?: any) => {}; // Placeholder
+  const setOpenBatchDetailsModal = (open: boolean) => {}; // Placeholder
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
   const [page, setPage] = React.useState(1);
 
@@ -154,7 +154,7 @@ export default function CustomTable({
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === 'all') return columns;
 
-    return columns.filter((column) =>
+    return columns.filter((column: any) =>
       Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
@@ -398,10 +398,9 @@ export default function CustomTable({
   const emptyContent = React.useMemo(() => {
     return (
       <div className="mt-4 flex flex-1 items-center rounded-2xl bg-slate-50 text-sm font-semibold text-slate-600 dark:bg-foreground/5">
-        <EmptyLogs
+        <EmptyState
           className={'my-auto mt-16'}
-          classNames={{ heading: 'text-sm text-foreground/50 font-medium' }}
-          subTitle={
+          description={
             emptyDescriptionText || 'you have no data to be displayed here.'
           }
           title={emptyTitleText || 'No data to display.'}
@@ -446,7 +445,7 @@ export default function CustomTable({
       onSortChange={setSortDescriptor as any}
     >
       <TableHeader className="fixed" columns={headerColumns}>
-        {(column) => (
+        {(column: any) => (
           <TableColumn
             key={column.uid}
             align={column.uid === 'status' ? 'center' : 'start'}

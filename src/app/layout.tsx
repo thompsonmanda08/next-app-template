@@ -338,6 +338,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       className={cn('h-screen scroll-smooth bg-background antialiased light')}
       suppressHydrationWarning
     >
+    <head>
+      <meta name="apple-mobile-web-app-title" content="WebbX" />
+    </head>
       <body
         className={cn(
           'flex min-h-screen flex-col bg-background font-inter overflow-x-hidden',

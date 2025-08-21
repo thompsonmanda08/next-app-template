@@ -46,3 +46,22 @@ export function useUserProfile() {
     refetchOnWindowFocus: false,
   });
 }
+
+export function useWorkspaceInit(workspaceID?: string) {
+  return useQuery({
+    queryFn: async () => {
+      // Simulate API call for workspace data
+      return {
+        data: {
+          activeWorkspace: { workspace: 'Default Workspace' },
+          workspaces: []
+        }
+      };
+    },
+    queryKey: ['workspace-init', workspaceID],
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+  });
+}

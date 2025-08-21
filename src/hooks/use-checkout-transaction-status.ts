@@ -22,7 +22,7 @@ export function useCheckoutTransactionStatus(transactionId?: string, onStatusCha
     setLoading(false);
     const response = {
       id: transactionId,
-      status: 'pending',
+      status: 'pending' as const,
       amount: 100,
       currency: 'USD'
     };

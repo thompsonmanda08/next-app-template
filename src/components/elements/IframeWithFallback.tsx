@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 import Spinner from '../ui/custom-spinner';
 
-import EmptyLogs from '../base/empty-logs';
+import EmptyState from '../base/empty-state';
 
 const IframeWithFallback = ({
   title,
@@ -55,11 +55,9 @@ const IframeWithFallback = ({
   if (hasError || !src) {
     return (
       <div className="flex min-h-[80vh] w-full items-center justify-center pt-2">
-        <EmptyLogs
+        <EmptyState
           className={'my-auto'}
-          subTitle={
-            'The requested content could not be loaded. Please try again later.'
-          }
+          description={'The requested content could not be loaded. Please try again later.'}
           title={'Oops! No content available'}
         />
       </div>
