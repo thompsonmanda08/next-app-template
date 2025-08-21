@@ -659,7 +659,7 @@ async function setupTailwindV4(projectPath, selectedPackages) {
   
   // Replace existing Tailwind imports with v4 syntax
   globalsContent = globalsContent.replace(
-    /@tailwind base;\n@tailwind components;\n@tailwind utilities;/g,
+    /@tailwind base;[\r\n]+@tailwind components;[\r\n]+@tailwind utilities;/g,
     '@import "tailwindcss";'
   );
 
@@ -734,40 +734,54 @@ async function setupTailwindV4(projectPath, selectedPackages) {
   const nextConfigPath = path.join(projectPath, 'next.config.ts');
   let nextConfig = fs.readFileSync(nextConfigPath, 'utf8');
   
-  // Add Tailwind v4 plugin to next.config.ts
+  // Add Tailwind v4 plugin to next.config.ts if not already present
   if (!nextConfig.includes('@tailwindcss/vite')) {
-    nextConfig = nextConfig.replace(
-      'import type { NextConfig } from "next";',
-      `import type { NextConfig } from "next";
+    // Add the import at the top
+    if (nextConfig.includes('import { NextConfig, SizeLimit }')) {
+      nextConfig = nextConfig.replace(
+        'import { NextConfig, SizeLimit } from \'next\';',
+        `import { NextConfig, SizeLimit } from 'next';
 import tailwindcss from '@tailwindcss/vite';`
-    );
+      );
+    } else if (nextConfig.includes('import type { NextConfig }')) {
+      nextConfig = nextConfig.replace(
+        'import type { NextConfig } from "next";',
+        `import type { NextConfig } from "next";
+import tailwindcss from '@tailwindcss/vite';`
+      );
+    } else {
+      // Fallback: add import after the first line
+      const lines = nextConfig.split('\n');
+      lines.splice(1, 0, 'import tailwindcss from \'@tailwindcss/vite\';');
+      nextConfig = lines.join('\n');
+    }
 
-    nextConfig = nextConfig.replace(
-      'const nextConfig: NextConfig = {',
-      `const nextConfig: NextConfig = {
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },`
-    );
-
-    // Add webpack configuration for Tailwind v4
-    nextConfig = nextConfig.replace(
-      'export default nextConfig;',
-      `  webpack: (config) => {
-    config.plugins?.push(tailwindcss());
+    // Add Tailwind CSS plugin to webpack config
+    // Look for existing webpack function and modify it
+    if (nextConfig.includes('webpack: (config, { dev, isServer }) => {')) {
+      // Add tailwindcss plugin after the existing webpack config starts
+      nextConfig = nextConfig.replace(
+        'webpack: (config, { dev, isServer }) => {',
+        `webpack: (config, { dev, isServer }) => {
+    // Add Tailwind CSS v4 plugin
+    config.plugins = config.plugins || [];
+    config.plugins.push(tailwindcss());`
+      );
+    } else {
+      // Add a new webpack section before the closing bracket
+      nextConfig = nextConfig.replace(
+        'export default nextConfig;',
+        `  webpack: (config) => {
+    // Add Tailwind CSS v4 plugin
+    config.plugins = config.plugins || [];
+    config.plugins.push(tailwindcss());
     return config;
   },
 };
 
 export default nextConfig;`
-    );
+      );
+    }
 
     fs.writeFileSync(nextConfigPath, nextConfig);
   }
