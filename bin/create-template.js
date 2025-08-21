@@ -69,7 +69,7 @@ const createInteractiveMenu = (title, options, defaultIndex = 0) => {
         case 'return':
           process.stdin.removeListener('keypress', handleKeypress);
           process.stdin.setRawMode(false);
-          process.stdin.pause();
+          process.stdin.resume();
           resolve(selectedIndex);
           break;
       }
@@ -384,7 +384,7 @@ const createMultiSelectMenu = (title, options) => {
         case 'return':
           process.stdin.removeListener('keypress', handleKeypress);
           process.stdin.setRawMode(false);
-          process.stdin.pause();
+          process.stdin.resume();
           resolve(Array.from(selectedItems));
           break;
       }
