@@ -1,7 +1,7 @@
 'use client';
-import { addToast, InputProps } from '@heroui/react';
+import { addToast } from '@heroui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import useCustomTabsHook from '@/hooks/use-custom-tabs';
 import { containerVariants } from '@/lib/constants';
@@ -13,8 +13,7 @@ import { ErrorState } from '@/types';
 import { registerUser } from '@/app/_actions/auth-actions';
 import { useRouter } from 'next/navigation';
 import CustomAlert from '../base/alert';
-// import { Input } from '../ui/input-field';
-import { Input } from '../ui/hero-input';
+import { Input } from '../ui/input';
 
 export default function SignUpForm() {
   const router = useRouter();

@@ -4,7 +4,7 @@ import { SearchIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { Button } from './button';
-import { Input } from './input-field';
+import { Input } from './input';
 
 export default function Search({
   placeholder,

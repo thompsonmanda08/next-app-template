@@ -113,10 +113,6 @@ export default function CustomTable({
     },
   },
 }: CustomTableProps) {
-  // TODO: Implement payment store functionality
-  // const { setSelectedBatch, setOpenBatchDetailsModal } = usePaymentsStore();
-  const setSelectedBatch = (row?: any) => {}; // Placeholder
-  const setOpenBatchDetailsModal = (open: boolean) => {}; // Placeholder
   const [rowsPerPage, setRowsPerPage] = React.useState(limitPerRow || 6);
   const [page, setPage] = React.useState(1);
 
@@ -282,10 +278,7 @@ export default function CustomTable({
             isIconOnly
             className={'max-w-fit p-2'}
             variant="light"
-            onPress={() => {
-              setSelectedBatch(row);
-              setOpenBatchDetailsModal(true);
-            }}
+            onPress={() => {}}
           >
             <Eye className="h-6 w-5" />
           </Button>
@@ -379,7 +372,7 @@ export default function CustomTable({
           color="primary"
           page={page}
           total={pages}
-          onChange={(page) => setPage(page)}
+          onChange={(page: number) => setPage(page)}
         />
         <label className="flex min-w-[180px] items-center gap-2 text-nowrap text-sm font-medium text-foreground-400">
           Rows per page:{' '}

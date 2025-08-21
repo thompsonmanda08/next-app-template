@@ -1,6 +1,6 @@
 {
   "name": "create-webbx-app",
-  "version": "1.6.0",
+  "version": "1.5.1",
   "private": false,
   "scripts": {
     "dev": "next dev --turbo",
@@ -41,6 +41,8 @@
   },
   "dependencies": {
     "@heroui/react": "^2.8.2",
+    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/vite": "^4.0.0",
     "@tanstack/react-query": "^5.85.2",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
@@ -78,7 +80,6 @@
     "prettier": "^3.6.2",
     "sharp": "^0.33.5",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/postcss": "^4.0.0",
     "typescript": "^5.9.2"
   }
 }

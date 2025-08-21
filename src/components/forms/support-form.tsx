@@ -3,7 +3,7 @@ import { addToast } from '@heroui/react';
 import { useState } from 'react';
 
 import { Button } from '../ui/button';
-import { Input } from '../ui/hero-input';
+import { Input } from '../ui/input';
 
 function SupportForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +46,6 @@ function SupportForm() {
     <>
       {' '}
       <div className="mx-auto max-w-lg p-6 bg-white rounded-lg shadow-sm border">
-      
-
         <form
           className="mx-auto flex w-full max-w-md flex-col gap-4"
           onSubmit={handleOnSubmit}

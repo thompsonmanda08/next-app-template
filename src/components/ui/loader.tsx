@@ -40,7 +40,14 @@ function Loader({
           { 'flex-row': isLandscape },
         )}
       >
-        <Spinner className={spinner} color={color} size={size} />
+        <Spinner 
+          className={spinner} 
+          color={color as any} 
+          size={typeof size === 'number' 
+            ? size <= 18 ? 'sm' : size <= 32 ? 'md' : 'lg'
+            : size as any
+          } 
+        />
         {loadingText && (
           <p
             className={cn(

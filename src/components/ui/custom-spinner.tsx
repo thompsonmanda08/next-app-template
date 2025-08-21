@@ -1,32 +1,31 @@
+import { Spinner as HeroUISpinner, SpinnerProps } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
-function Spinner({ size = 18, color = '#1B64CE', className = '' }) {
+type CustomSpinnerProps = Partial<SpinnerProps> & {
+  size?: number | 'sm' | 'md' | 'lg';
+  color?: 'current' | 'white' | 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  className?: string;
+};
+
+export default function Spinner({ 
+  size = 'md', 
+  color = 'primary', 
+  className = '',
+  ...props 
+}: CustomSpinnerProps) {
+  // Convert number size to HeroUI size format
+  const heroUISize = typeof size === 'number' 
+    ? size <= 18 ? 'sm' : size <= 32 ? 'md' : 'lg'
+    : size;
+
   return (
     <div className="flex flex-1 items-center justify-center">
-      <svg
-        className={cn('animate-spin text-current', className)}
-        fill="none"
-        hanging={size}
-        viewBox="0 0 24 24"
-        width={size}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke={color}
-          strokeWidth="4"
-        />
-        <path
-          className="opacity-75"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          fill={color}
-        />
-      </svg>
+      <HeroUISpinner
+        className={cn(className)}
+        color={color}
+        size={heroUISize}
+        {...props}
+      />
     </div>
   );
 }
-
-export default Spinner;

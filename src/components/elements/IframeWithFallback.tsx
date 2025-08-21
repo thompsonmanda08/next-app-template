@@ -47,7 +47,7 @@ const IframeWithFallback = ({
   if (isLoading) {
     return (
       <div className="flex min-h-[80vh] w-full items-center justify-center pt-2">
-        <Spinner size={80} />
+        <Spinner size="lg" />
       </div>
     );
   }

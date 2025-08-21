@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import Spinner from './custom-spinner';
+import Spinner from '../ui/custom-spinner';
 
 const modalVariants = {
   hidden: { opacity: 0, scale: 0.85 },
@@ -90,8 +90,8 @@ function OverlayLoader({
                 {/* <Loader2 className="h-10 w-10 animate-spin text-primary" /> */}
                 <Spinner
                   className={classNames?.spinner}
-                  // color="#ffffff"
-                  size={60}
+                  color="white"
+                  size="lg"
                 />
               </div>
             </div>

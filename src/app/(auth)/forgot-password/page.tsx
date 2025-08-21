@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 // Note: Replace with actual auth actions implementation
-import { Input } from "@/components/ui/hero-input";
-import { Button } from "@/components/ui/button";
-import { addToast } from "@heroui/react";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { addToast } from '@heroui/react';
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage("");
+    setMessage('');
 
     if (!email || !email.trim()) {
-      setMessage("Please provide your email address.");
+      setMessage('Please provide your email address.');
       return;
     }
 
@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
     try {
       // Simulate reset email sending - replace with actual implementation
       const response = { success: true };
-      
+
       if (response.success) {
         router.push(`/?password_reset_link_sent=${true}`);
         addToast({
@@ -43,7 +43,7 @@ export default function ForgotPasswordPage() {
           title: 'Error',
           description: 'Failed to send reset email',
         });
-        setMessage("Error: Failed to send reset email");
+        setMessage('Error: Failed to send reset email');
       }
     } catch (error) {
       addToast({
@@ -51,7 +51,7 @@ export default function ForgotPasswordPage() {
         title: 'Error',
         description: 'An unexpected error occurred',
       });
-      setMessage("Error: An unexpected error occurred");
+      setMessage('Error: An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -78,16 +78,21 @@ export default function ForgotPasswordPage() {
           required
           isDisabled={isSubmitting}
         />
-        <Button type="submit" disabled={isSubmitting} isLoading={isSubmitting} className="w-full">
-          {isSubmitting ? "Sending..." : "Send Reset Link"}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          className="w-full"
+        >
+          {isSubmitting ? 'Sending...' : 'Send Reset Link'}
         </Button>
 
         {message && (
           <div
             className={`mt-4 p-4 rounded-lg text-center ${
-              message.includes("🎉") || message.includes("successfully")
-                ? "bg-green-50 text-green-800 border border-green-200"
-                : "bg-red-50 text-red-800 border border-red-200"
+              message.includes('🎉') || message.includes('successfully')
+                ? 'bg-green-50 text-green-800 border border-green-200'
+                : 'bg-red-50 text-red-800 border border-red-200'
             }`}
           >
             {message}
@@ -97,7 +102,7 @@ export default function ForgotPasswordPage() {
 
       <div className="mt-8 text-center">
         <p className="text-gray-600">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <Link
             href="/register"
             className="text-black font-medium hover:underline"

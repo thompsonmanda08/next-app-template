@@ -115,29 +115,11 @@ const OPTIONAL_PACKAGES = {
   },
   ui: {
     v3: {
-      '@heroui/react': '^2.8.2',
-      '@radix-ui/react-dialog': '^1.1.15'
+      '@heroui/react': '^2.7.0'
     },
     v4: {
-      '@heroui/react': '^2.8.2',
-      '@radix-ui/react-dialog': '^1.1.15'
+      '@heroui/react': '^2.8.2'
     }
-  },
-  shadcnUI: {
-    '@radix-ui/react-slot': '^1.1.0',
-    '@radix-ui/react-toast': '^1.2.2',
-    '@radix-ui/react-tooltip': '^1.1.3',
-    '@radix-ui/react-dropdown-menu': '^2.1.2',
-    '@radix-ui/react-select': '^2.1.2',
-    '@radix-ui/react-checkbox': '^1.1.2',
-    '@radix-ui/react-switch': '^1.1.1',
-    '@radix-ui/react-tabs': '^1.1.1',
-    '@radix-ui/react-accordion': '^1.2.1',
-    '@radix-ui/react-avatar': '^1.1.1',
-    '@radix-ui/react-progress': '^1.1.0',
-    'class-variance-authority': '^0.7.1',
-    'clsx': '^2.1.1',
-    'tailwind-merge': '^3.3.1'
   },
   fileHandling: {
     'react-dropzone': '^14.3.8'
@@ -147,23 +129,6 @@ const OPTIONAL_PACKAGES = {
   }
 };
 
-const SHADCN_COMPONENTS = {
-  button: { name: 'Button', file: 'button.tsx' },
-  input: { name: 'Input', file: 'input.tsx' },
-  card: { name: 'Card', file: 'card.tsx' },
-  badge: { name: 'Badge', file: 'badge.tsx' },
-  alert: { name: 'Alert', file: 'alert.tsx' },
-  avatar: { name: 'Avatar', file: 'avatar.tsx' },
-  checkbox: { name: 'Checkbox', file: 'checkbox.tsx' },
-  dropdown: { name: 'Dropdown Menu', file: 'dropdown-menu.tsx' },
-  select: { name: 'Select', file: 'select.tsx' },
-  switch: { name: 'Switch', file: 'switch.tsx' },
-  tabs: { name: 'Tabs', file: 'tabs.tsx' },
-  toast: { name: 'Toast', file: 'toast.tsx' },
-  tooltip: { name: 'Tooltip', file: 'tooltip.tsx' },
-  accordion: { name: 'Accordion', file: 'accordion.tsx' },
-  progress: { name: 'Progress', file: 'progress.tsx' }
-};
 
 function detectPackageManager() {
   try {
@@ -259,13 +224,13 @@ async function main() {
 async function selectTailwindVersion() {
   const tailwindOptions = [
     'Tailwind CSS v3 (stable, widely supported)',
-    'Tailwind CSS v4 (beta, modern features)'
+    'Tailwind CSS v4 (recommended, modern features)'
   ];
   
-  const selectedTailwindIndex = await createInteractiveMenu('🎨 Choose Tailwind CSS version:', tailwindOptions, 0);
+  const selectedTailwindIndex = await createInteractiveMenu('🎨 Choose Tailwind CSS version:', tailwindOptions, 1);
   
   const version = selectedTailwindIndex === 1 ? 'v4' : 'v3';
-  const versionName = selectedTailwindIndex === 1 ? 'Tailwind CSS v4 (beta)' : 'Tailwind CSS v3 (stable)';
+  const versionName = selectedTailwindIndex === 1 ? 'Tailwind CSS v4 (recommended)' : 'Tailwind CSS v3 (stable)';
   
   console.clear();
   console.log('\n🚀 Welcome to Next.js App Template Generator!\n');
@@ -301,36 +266,13 @@ async function selectPackages() {
   
   // UI Components
   console.log('\n🎨 UI COMPONENTS:');
-  const useUILibs = await question('  Include UI libraries? (HeroUI + Radix UI) [y/N]: ');
+  const useUILibs = await question('  Include UI libraries? (HeroUI) [y/N]: ');
   selections.ui = useUILibs.toLowerCase() === 'y';
   
   // File Handling
   console.log('\n📁 FILE HANDLING:');
   const useFileHandling = await question('  Include file handling? (React Dropzone) [y/N]: ');
   selections.fileHandling = useFileHandling.toLowerCase() === 'y';
-  
-  // ShadCN UI
-  console.log('\n🎨 SHADCN UI:');
-  const useShadcn = await question('  Include ShadCN UI components? [Y/n]: ');
-  selections.shadcnUI = useShadcn.toLowerCase() !== 'n';
-  
-  if (selections.shadcnUI) {
-    const componentOptions = [
-      'All components',
-      'Select specific components',
-      'Skip components (setup only)'
-    ];
-    
-    const componentChoiceIndex = await createInteractiveMenu('🧩 ShadCN Components:', componentOptions, 0);
-    
-    if (componentChoiceIndex === 0) {
-      selections.shadcnComponents = Object.keys(SHADCN_COMPONENTS);
-    } else if (componentChoiceIndex === 1) {
-      selections.shadcnComponents = await selectShadcnComponents();
-    } else {
-      selections.shadcnComponents = [];
-    }
-  }
   
   return selections;
 }
@@ -399,21 +341,6 @@ const createMultiSelectMenu = (title, options) => {
   });
 };
 
-async function selectShadcnComponents() {
-  const componentEntries = Object.entries(SHADCN_COMPONENTS);
-  const componentNames = componentEntries.map(([key, component]) => component.name);
-  
-  const selectedIndices = await createMultiSelectMenu('🧩 Select ShadCN components to include:', componentNames);
-  
-  const selectedComponents = selectedIndices.map(index => componentEntries[index][0]);
-  
-  console.clear();
-  console.log('\n🚀 Welcome to Next.js App Template Generator!\n');
-  console.log(`Creating a new Next.js app: ${projectName}\n`);
-  console.log(`✅ Selected ${selectedComponents.length} ShadCN components\n`);
-  
-  return selectedComponents;
-}
 
 async function setupProject(projectPath, selectedPackages, packageManager, tailwindVersion) {
   console.log('🧹 Cleaning up template files...');
@@ -425,6 +352,10 @@ async function setupProject(projectPath, selectedPackages, packageManager, tailw
     'node_modules',
     '.next',
     '.env.local',
+    'package-v3.json',
+    'package-v4.json',
+    'src/app/globals-v3.css',
+    'tailwind.config.ts', // Remove this as we'll create it conditionally
   ];
 
   filesToRemove.forEach(file => {
@@ -522,10 +453,6 @@ async function setupProject(projectPath, selectedPackages, packageManager, tailw
   // Setup Tailwind configuration
   await setupTailwindConfig(projectPath, tailwindVersion, selectedPackages);
 
-  // Setup ShadCN UI if selected
-  if (selectedPackages.shadcnUI) {
-    await setupShadcnUI(projectPath, selectedPackages, packageManager, tailwindVersion);
-  }
 
   console.log('');
   console.log(`✅ Success! Created ${projectName} at ${projectPath}`);
@@ -560,86 +487,129 @@ async function setupTailwindConfig(projectPath, tailwindVersion, selectedPackage
 }
 
 async function setupTailwindV3(projectPath, selectedPackages) {
-  // Create tailwind.config.js for v3
-  const tailwindConfig = `/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ["class"],
+  // Copy the tailwind.config.ts file from template
+  const sourceConfigPath = path.join(__dirname, '..', 'tailwind.config.ts');
+  const destConfigPath = path.join(projectPath, 'tailwind.config.ts');
+  
+  if (fs.existsSync(sourceConfigPath)) {
+    fs.copyFileSync(sourceConfigPath, destConfigPath);
+  } else {
+    // Fallback: create the config inline
+    const tailwindConfig = `import type { Config } from 'tailwindcss';
+import { heroui } from '@heroui/react';
+
+const config: Config = {
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
-  prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
+      fontFamily: {
+        inter: ['var(--font-inter)', 'Inter', 'sans-serif'],
+      },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")${selectedPackages.ui ? ', require("@tailwindcss/forms")' : ''}],
-}`;
+  darkMode: ['class'],
+  plugins: [
+    heroui({
+      addCommonColors: true,
+      themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: '#000000',
+              foreground: '#ffffff',
+            },
+            secondary: {
+              DEFAULT: '#ffffff',
+              foreground: '#000000',
+            },
+            default: {
+              DEFAULT: '#f5f5f5',
+              foreground: '#000000',
+            },
+            background: '#ffffff',
+            foreground: '#000000',
+          },
+        },
+        dark: {
+          colors: {
+            primary: {
+              DEFAULT: '#ffffff',
+              foreground: '#000000',
+            },
+            secondary: {
+              DEFAULT: '#000000',
+              foreground: '#ffffff',
+            },
+            default: {
+              DEFAULT: '#1a1a1a',
+              foreground: '#ffffff',
+            },
+            background: '#000000',
+            foreground: '#ffffff',
+          },
+        },
+      },
+    }),
+  ],
+};
 
-  fs.writeFileSync(path.join(projectPath, 'tailwind.config.js'), tailwindConfig);
+export default config;`;
+    
+    fs.writeFileSync(destConfigPath, tailwindConfig);
+  }
+
+  // Replace globals.css with v3 version
+  const sourceGlobalsPath = path.join(__dirname, '..', 'src', 'app', 'globals-v3.css');
+  const destGlobalsPath = path.join(projectPath, 'src', 'app', 'globals.css');
+  
+  if (fs.existsSync(sourceGlobalsPath)) {
+    fs.copyFileSync(sourceGlobalsPath, destGlobalsPath);
+  }
 
   // Create/update postcss.config.mjs
   const postcssConfig = `export default {
@@ -653,6 +623,53 @@ module.exports = {
 }
 
 async function setupTailwindV4(projectPath, selectedPackages) {
+  // Create HeroUI plugin configuration file
+  const heroConfigContent = `import { heroui } from "@heroui/react";
+
+export default heroui({
+  addCommonColors: true,
+  themes: {
+    light: {
+      colors: {
+        primary: {
+          DEFAULT: '#000000',
+          foreground: '#ffffff',
+        },
+        secondary: {
+          DEFAULT: '#ffffff',
+          foreground: '#000000',
+        },
+        default: {
+          DEFAULT: '#f5f5f5',
+          foreground: '#000000',
+        },
+        background: '#ffffff',
+        foreground: '#000000',
+      },
+    },
+    dark: {
+      colors: {
+        primary: {
+          DEFAULT: '#ffffff',
+          foreground: '#000000',
+        },
+        secondary: {
+          DEFAULT: '#000000',
+          foreground: '#ffffff',
+        },
+        default: {
+          DEFAULT: '#1a1a1a',
+          foreground: '#ffffff',
+        },
+        background: '#000000',
+        foreground: '#ffffff',
+      },
+    },
+  },
+});`;
+
+  fs.writeFileSync(path.join(projectPath, 'hero.ts'), heroConfigContent);
+
   // Tailwind v4 uses CSS-based configuration
   const globalsPath = path.join(projectPath, 'src', 'app', 'globals.css');
   let globalsContent = fs.readFileSync(globalsPath, 'utf8');
@@ -660,7 +677,10 @@ async function setupTailwindV4(projectPath, selectedPackages) {
   // Replace existing Tailwind imports with v4 syntax
   globalsContent = globalsContent.replace(
     /@tailwind base;[\r\n]+@tailwind components;[\r\n]+@tailwind utilities;/g,
-    '@import "tailwindcss";'
+    `@import "tailwindcss";
+@plugin '../../hero.ts';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));`
   );
 
   // Add Tailwind v4 theme configuration
@@ -785,328 +805,21 @@ export default nextConfig;`
 
     fs.writeFileSync(nextConfigPath, nextConfig);
   }
+
+  // Create PostCSS configuration for Tailwind v4
+  const postcssConfig = `/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;`;
+
+  fs.writeFileSync(path.join(projectPath, 'postcss.config.mjs'), postcssConfig);
 }
 
-async function setupShadcnUI(projectPath, selectedPackages, packageManager, tailwindVersion) {
-  console.log('🎨 Setting up ShadCN UI...');
 
-  // Create components.json for ShadCN with Tailwind version-specific config
-  const componentsConfig = {
-    "$schema": "https://ui.shadcn.com/schema.json",
-    "style": "default",
-    "rsc": true,
-    "tsx": true,
-    "tailwind": {
-      "config": tailwindVersion === 'v4' ? "src/app/globals.css" : "tailwind.config.js",
-      "css": "src/app/globals.css",
-      "baseColor": "slate",
-      "cssVariables": true,
-      "cssVariablesPrefix": tailwindVersion === 'v4' ? "--color-" : "",
-      "prefix": ""
-    },
-    "aliases": {
-      "components": "@/components",
-      "utils": "@/lib/utils"
-    }
-  };
-
-  fs.writeFileSync(
-    path.join(projectPath, 'components.json'),
-    JSON.stringify(componentsConfig, null, 2)
-  );
-
-  // Create ShadCN utils file
-  const utilsContent = `import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}`;
-
-  const libDir = path.join(projectPath, 'src', 'lib');
-  if (!fs.existsSync(libDir)) {
-    fs.mkdirSync(libDir, { recursive: true });
-  }
-  
-  fs.writeFileSync(path.join(libDir, 'utils.ts'), utilsContent);
-
-  // Update globals.css with ShadCN styles (only for v3, v4 already has colors configured)
-  if (tailwindVersion === 'v3') {
-    const globalsPath = path.join(projectPath, 'src', 'app', 'globals.css');
-    let globalsContent = fs.readFileSync(globalsPath, 'utf8');
-    
-    const shadcnStylesV3 = `
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-`;
-
-    // Add ShadCN styles to globals.css if not already present
-    if (!globalsContent.includes('--background:')) {
-      globalsContent += shadcnStylesV3;
-      fs.writeFileSync(globalsPath, globalsContent);
-    }
-  }
-
-  // Install selected ShadCN components
-  if (selectedPackages.shadcnComponents && selectedPackages.shadcnComponents.length > 0) {
-    console.log('🧩 Installing selected ShadCN components...');
-    
-    // Create components/ui directory
-    const uiDir = path.join(projectPath, 'src', 'components', 'ui');
-    if (!fs.existsSync(uiDir)) {
-      fs.mkdirSync(uiDir, { recursive: true });
-    }
-
-    // Generate component files
-    for (const componentKey of selectedPackages.shadcnComponents) {
-      const component = SHADCN_COMPONENTS[componentKey];
-      if (component) {
-        await createShadcnComponent(projectPath, componentKey, component);
-      }
-    }
-  }
-
-  console.log('✅ ShadCN UI setup complete!');
-}
-
-async function createShadcnComponent(projectPath, componentKey, component) {
-  const uiDir = path.join(projectPath, 'src', 'components', 'ui');
-  const componentPath = path.join(uiDir, component.file);
-
-  // Basic component templates
-  const componentTemplates = {
-    button: `import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
-
-const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Button.displayName = "Button"
-
-export { Button, buttonVariants }`,
-
-    input: `import * as React from "react"
-import { cn } from "@/lib/utils"
-
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Input.displayName = "Input"
-
-export { Input }`,
-
-    card: `import * as React from "react"
-import { cn } from "@/lib/utils"
-
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
-
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-))
-CardHeader.displayName = "CardHeader"
-
-const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
-CardTitle.displayName = "CardTitle"
-
-const CardDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
-))
-CardFooter.displayName = "CardFooter"
-
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }`
-  };
-
-  // Get component template or create a basic one
-  let componentContent = componentTemplates[componentKey];
-  
-  if (!componentContent) {
-    // Create a basic component template if we don't have a specific one
-    componentContent = `import * as React from "react"
-import { cn } from "@/lib/utils"
-
-export interface ${component.name}Props extends React.HTMLAttributes<HTMLDivElement> {}
-
-const ${component.name} = React.forwardRef<HTMLDivElement, ${component.name}Props>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn("", className)}
-        {...props}
-      />
-    )
-  }
-)
-${component.name}.displayName = "${component.name}"
-
-export { ${component.name} }`;
-  }
-
-  fs.writeFileSync(componentPath, componentContent);
-  console.log(`  ✅ Created ${component.name} component`);
-}
 
 function cleanupUnusedFiles(projectPath, selectedPackages) {
   // Charts and Sentry are no longer included in the template, so no cleanup needed

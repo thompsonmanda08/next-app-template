@@ -7,7 +7,7 @@ A modern, production-ready Next.js 15 template with TypeScript, Tailwind CSS, an
 - ⚡ **Next.js 15** with App Router and Turbo
 - 🔷 **TypeScript** for type safety
 - 🎨 **Tailwind CSS v3/v4** - Choose your preferred version during setup
-- 🧩 **ShadCN UI Integration** - Optional components with both Tailwind versions
+- 🧩 **HeroUI Integration** - Modern UI components with full Tailwind v4 support
 - 📦 **Smart Package Manager** - Auto-detects Bun/Yarn/npm
 - 🔐 **Authentication Ready** - Pre-built auth forms and layouts
 - 📱 **Responsive Design** - Mobile-first approach
@@ -17,7 +17,7 @@ A modern, production-ready Next.js 15 template with TypeScript, Tailwind CSS, an
   - TanStack Query (Data Fetching) 
   - Framer Motion (Animations)
   - React Dropzone (File Handling)
-  - HeroUI + Radix UI (UI Components)
+  - HeroUI (UI Components)
 - 🛠 **Development Tools** - ESLint, Prettier, TypeScript
 - 🐳 **Docker Ready** - Production-ready Dockerfile
 - 🚀 **Interactive Setup** - Choose only what you need
@@ -65,12 +65,13 @@ The template includes an interactive setup process that lets you choose:
 - **Zustand** - State management
 - **TanStack Query** - Data fetching & caching
 - **Framer Motion** - Animations
-- **UI Libraries** - HeroUI + Radix UI components
+- **HeroUI** - Modern React component library
 - **React Dropzone** - File handling
-- **ShadCN UI** - Component library with customizable components
+- **ShadCN UI** - Optional component library (choose during setup)
 
-### ShadCN Components (if selected)
-Choose from 15+ pre-built components like Button, Input, Card, etc., or select specific ones you need.
+### UI Components
+- **HeroUI** (default) - Modern components with excellent Tailwind integration
+- **ShadCN UI** (optional) - Customizable components for Tailwind v3
 
 ## 📁 Project Structure
 
@@ -129,14 +130,15 @@ docker run -p 3000:3000 my-app:1.0.0
 
 ### Branding & Content
 1. **Logo**: Replace logo in `src/components/base/logo.tsx`
-2. **Colors**: Edit CSS variables in `src/app/globals.css` or Tailwind config
+2. **Colors**: Edit CSS variables in `src/app/globals.css` or `hero.ts` config
 3. **Typography**: Modify font imports in `src/app/layout.tsx`
 4. **Content**: Update placeholder text in components and pages
 
 ### Theme Configuration
-- **Tailwind v3**: Edit `tailwind.config.js`
-- **Tailwind v4**: Modify CSS variables in `src/app/globals.css`
-- **Dark mode**: Colors automatically adjust via CSS variables
+- **HeroUI Themes**: Edit `hero.ts` for comprehensive theme customization
+- **Tailwind v3**: Edit `tailwind.config.ts` (if using v3)
+- **Tailwind v4**: Modify CSS variables in `src/app/globals.css` (default)
+- **Dark mode**: Colors automatically adjust via CSS variables and HeroUI themes
 
 ### Adding Features
 1. **New pages**: Add to appropriate route groups in `src/app/`
@@ -152,8 +154,11 @@ docker run -p 3000:3000 my-app:1.0.0
 - **Styling**: Tailwind CSS v3/v4 (your choice)
 - **Package Manager**: Bun/Yarn/npm (auto-detected)
 
+### Default Integrations
+- **UI Components**: HeroUI (included by default)
+
 ### Optional Integrations (Choose during setup)
-- **UI Components**: ShadCN UI + HeroUI + Radix UI
+- **ShadCN UI**: Alternative component library
 - **Icons**: Lucide React
 - **State Management**: Zustand
 - **Data Fetching**: TanStack Query
@@ -169,9 +174,9 @@ docker run -p 3000:3000 my-app:1.0.0
 
 ## 📦 Version Information
 
-- **Current Alpha**: `1.4.2-alpha.2` (development, includes latest fixes)
-- **Coming Soon**: `2.0.0-beta.x` (beta testing)  
-- **Stable Release**: `2.0.0` (production ready)
+- **Current Release**: `1.6.0` (stable, HeroUI as default UI library)
+- **Previous**: `1.5.1` (ShadCN as default)
+- **Coming Soon**: `2.0.0` (major release with enhanced features)
 
 ### Using Different Versions
 ```bash

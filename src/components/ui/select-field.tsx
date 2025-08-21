@@ -37,7 +37,7 @@ function SelectField({
   className,
   classNames,
   wrapperClassName,
-
+  labelPlacement,
   isInvalid,
   prefilled = false,
   ...props
@@ -50,7 +50,7 @@ function SelectField({
         classNames?.wrapper,
       )}
     >
-      {label && (
+      {/* {label && (
         <label
           className={cn(
             'ml-1 text-sm font-medium text-foreground/70',
@@ -64,11 +64,14 @@ function SelectField({
           {label}{' '}
           {props?.required && <span className="font-bold text-red-500">*</span>}
         </label>
-      )}
+      )} */}
       <div
         className={`group relative flex w-full flex-col items-start justify-start gap-1`}
       >
         <Select
+          label={label}
+          variant="bordered"
+          labelPlacement={labelPlacement}
           className={cn('font-medium', className)}
           classNames={{
             base: cn(
@@ -100,7 +103,6 @@ function SelectField({
           placeholder={placeholder || 'Choose an option'}
           selectedKeys={Boolean(prefilled) ? [value] : undefined}
           value={value}
-          variant="bordered"
           onChange={onChange}
           {...props}
         >

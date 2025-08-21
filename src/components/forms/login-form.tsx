@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
-import { Input } from '../ui/hero-input';
+import { Input } from '../ui/input';
 import { LoginPayload } from '@/types/account';
 
 import { Button } from '../ui/button';

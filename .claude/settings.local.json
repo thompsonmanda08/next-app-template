@@ -12,7 +12,10 @@
       "Bash(npm run build:*)",
       "Bash(npx create-webbx-app@alpha:*)",
       "Bash(bun install:*)",
-      "Bash(bun run:*)"
+      "Bash(bun run:*)",
+      "Bash(npm run lint)",
+      "Bash(find:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": [],
